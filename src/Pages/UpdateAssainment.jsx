@@ -2,78 +2,74 @@ import React, { useContext, useState, useEffect } from 'react';
 import axios from 'axios';
 import toast from 'react-hot-toast';
 import { useParams } from 'react-router-dom';
+
+import DatePicker from 'react-datepicker';
 import { AuthContext } from '../Authprovider/Authprovider';
-import DatePicker from 'react-datepicker'; // Import DatePicker
-import 'react-datepicker/dist/react-datepicker.css'; // Add DatePicker styles
+
 
 const UpdateAssignment = () => {
-  const { user } = useContext(AuthContext); // Get user info
-  const { id } = useParams(); // Get assignment ID from URL params
+  const { user } = useContext(AuthContext); // Auth context for user info
+  const { id } = useParams(); // Assignment ID from route
+  
 
-  // Initialize form data state with default values
   const [formData, setFormData] = useState({
     title: '',
     description: '',
     marks: '',
     thumbnail: '',
-    difficulty: 'Easy', // Default value for difficulty
-    dueDate: new Date(), // Default to current date
+    difficulty: 'Easy',
+    dueDate: new Date(),
   });
 
-  // Fetch assignment data on component mount
   useEffect(() => {
-    const fetchAssignment = async () => {
-      try {
-        const response = await axios.get(
-          `${import.meta.env.VITE_API_URL}/update-assignment/${id}`
-        );
-        setFormData({
-          title: response.data.title || '', // Default to empty string if not found
-          description: response.data.description || '',
-          marks: response.data.marks || '',
-          thumbnail: response.data.thumbnail || '',
-          difficulty: response.data.difficulty || 'Easy',
-          dueDate: response.data.dueDate ? new Date(response.data.dueDate) : new Date(),
-        });
-      } catch (error) {
-        toast.error('Failed to fetch assignment data.');
-      }
-    };
-
     fetchAssignment();
   }, [id]);
 
-  // Handle input changes
+  const fetchAssignment = async () => {
+    try {
+      const { data } = await axios.get(
+        `${import.meta.env.VITE_API_URL}/assignments/${id}`
+      );
+      setFormData({
+        title: data.title || '',
+        description: data.description || '',
+        marks: data.marks || '',
+        thumbnail: data.thumbnail || '',
+        difficulty: data.difficulty || 'Easy',
+        dueDate: data.dueDate ? new Date(data.dueDate) : new Date(),
+      });
+    } catch (error) {
+      toast.error('Failed to load assignment data. Please try again.');
+    }
+  };
+
   const handleInputChange = (e) => {
     const { name, value } = e.target;
     setFormData({ ...formData, [name]: value });
   };
 
-  // Handle date picker changes
   const handleDateChange = (date) => {
     setFormData({ ...formData, dueDate: date });
   };
 
-  // Handle form submission
   const handleSubmit = async (e) => {
     e.preventDefault();
-
     const assignmentData = {
       ...formData,
-      email: user?.email || 'Unknown', // Include logged-in user's email
-      dueDate: formData.dueDate.toISOString(), // Convert to ISO string for backend
+      email: user?.email || 'unknown',
+      dueDate: formData.dueDate.toISOString(),
     };
 
     try {
-      const response = await axios.put(
-        `${import.meta.env.VITE_API_URL}/update-assignment/${id}`,
+      const { data } = await axios.put(
+        `${import.meta.env.VITE_API_URL}/assignments/${id}`,
         assignmentData
       );
 
-      if (response.data.success) {
+      if (data.success) {
         toast.success('Assignment updated successfully!');
       } else {
-        toast.error(response.data.message || 'Failed to update assignment!');
+        toast.error(data.message || 'Failed to update assignment.');
       }
     } catch (error) {
       toast.error('An error occurred while updating the assignment.');
@@ -84,7 +80,6 @@ const UpdateAssignment = () => {
     <div className="container mx-auto p-6 my-12 border border-white shadow-md rounded-md">
       <h2 className="text-2xl font-bold mb-6">Update Assignment</h2>
       <form onSubmit={handleSubmit} className="space-y-6">
-        {/* Row 1 */}
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
           <div>
             <label className="block mb-2">Title</label>
@@ -109,7 +104,6 @@ const UpdateAssignment = () => {
           </div>
         </div>
 
-        {/* Row 2 */}
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
           <div>
             <label className="block mb-2">Marks</label>
@@ -148,7 +142,6 @@ const UpdateAssignment = () => {
           </div>
         </div>
 
-        {/* Row 3 */}
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 items-end">
           <div>
             <label className="block mb-2">Due Date</label>

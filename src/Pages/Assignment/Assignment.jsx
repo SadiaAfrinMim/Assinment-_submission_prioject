@@ -23,10 +23,11 @@ const Assignment = () => {
   console.log('ehllo',assignments);
 
   return (
-    <div>
+    <div >
+      <h1 className='text-3xl font-bold text-cyan-500 py-8'>Total_Assainment_({assignments.length})</h1>
       <div className='grid  rounded-lg lg:grid-cols-2 md:grid-cols-2 grid-cols-1 gap-8'>
         {assignments.map((assignment) => (
-          <AssignmentAll key={assignment._id} assignment={assignment} />
+          <AssignmentAll key={assignment._id} fetchdata={ fetchAllAssignments} assignment={assignment} />
         ))}
       </div>
     </div>

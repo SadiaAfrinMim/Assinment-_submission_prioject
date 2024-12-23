@@ -7,7 +7,7 @@ import { FaPenToSquare } from "react-icons/fa6";
 import { FaEye } from "react-icons/fa";
 import { MdDeleteSweep } from "react-icons/md";
 
-const AssignmentAll = ({ assignment }) => {
+const AssignmentAll = ({ assignment,fetchdata }) => {
   const { user } = useContext(AuthContext); // Accessing the logged-in user info
   const {
     _id,
@@ -29,10 +29,12 @@ const AssignmentAll = ({ assignment }) => {
       const response = await axios.delete(
         `${import.meta.env.VITE_API_URL}/assignments/${_id}/${user.email}`
       );
+      
       if (response.status === 200) {
         // Successfully deleted, close the modal and show success message
         setDeleteModalOpen(false);
         toast.success('Assignment deleted successfully!');
+        fetchdata()
       }
     } catch (error) {
       toast.error('Failed to delete the assignment!');
@@ -74,7 +76,7 @@ const AssignmentAll = ({ assignment }) => {
         
           <div className="join join-vertical">
             <Link to={`/details/${_id}`} className="btn join-item bg-[#06B6D4] text-white"><FaEye className='text-3xl font-bold' /></Link>
-            <Link to={`/update-assignment/${_id}`} className="btn join-item " ><FaPenToSquare  className='text-3xl font-bold' /></Link>
+            <Link to={`/update-assainment/${_id}`} className="btn join-item " ><FaPenToSquare  className='text-3xl font-bold' /></Link>
             <button onClick={() => setDeleteModalOpen(true)} className="btn join-item bg-[#06B6D4] text-white"><MdDeleteSweep className='text-3xl font-bold ' /></button>
        
         </div>
