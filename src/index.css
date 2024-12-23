@@ -1,0 +1,205 @@
+@import url('https://fonts.googleapis.com/css2?family=Parkinsans:wght@300..800&display=swap');
+
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+
+
+/* General Reset */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: "Parkinsans", sans-serif;
+}
+
+/* Common Styles */
+body {
+    background-color: var(--background-color);
+    color: var(--primary-text-color);
+    transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+button {
+    border: none;
+    padding: 0.5rem 1rem;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+button:hover {
+    background-color: var(--toggle-bg);
+}
+
+.navbar {
+    background-color: var(--navbar-bg); /* Updated Navbar Blue */
+    color: var(--primary-text-color);
+    padding: 1rem;
+    display: flex;
+    justify-content: space-between;
+    border-bottom: 2px solid var(--highlight-color); /* Adds a subtle highlight */
+}
+
+a {
+    color: var(--foreground-color);
+    text-decoration: none;
+    padding: 0.5rem 1rem;
+    border-radius: 4px;
+    transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+a:hover {
+    background-color: var(--toggle-bg);
+    color: var(--secondary-text-color);
+}
+
+.toggle-switch {
+    background-color: var(--toggle-bg);
+    color: var(--secondary-text-color);
+    border: none;
+    padding: 0.5rem 1rem;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+/* Light Theme Variables */
+:root {
+    --background-color: #F9FAFB; /* Soft White */
+    --foreground-color: #4C80B6; /* Soft Blue */
+    --navbar-bg: #D1E2F1; /* Lightened, softer blue for Navbar */
+    --primary-text-color: #2D3748; /* Darker Gray for text (improved contrast) */
+    --secondary-text-color: #4A5568; /* Softer dark gray for secondary text */
+    --toggle-bg: #3B82F6; /* Vivid Blue */
+    --toggle-fg: #10B981; /* Green accent */
+    --highlight-color: #10B981; /* Green accent for highlights */
+    --error-color: #EF4444; /* Red for errors */
+    --success-color: #22C55E; /* Lime Green for success */
+}
+
+/* Dark Theme Variables */
+[data-theme="dark"] {
+    --background-color: #111827; /* Dark Gray */
+    --foreground-color: #06B6D4; /* Cyan */
+    --primary-text-color: #F9FAFB; /* Off-white */
+    --secondary-text-color: #E5E7EB; /* Light Gray */
+    --toggle-bg: #1E293B; /* Dark Navy */
+    --toggle-fg: #14B8A6; /* Teal */
+    --link-color: #14B8A6; /* Teal Links */
+    --highlight-color: #8B5CF6; /* Purple for highlights */
+    --error-color: #F87171; /* Soft Red for errors */
+    --success-color: #34D399; /* Mint Green for success */
+    --navbar-bg: #000000; /* Black Navbar for Dark Mode */
+}
+
+/* Light Mode UI Look */
+.light-mode {
+    --background-color: #F9FAFB; /* Soft White */
+    --foreground-color: #4C80B6; /* Soft Blue */
+    --primary-text-color: #2D3748; /* Darker Gray */
+    --secondary-text-color: #4A5568; /* Softer dark gray */
+    --navbar-bg: #D1E2F1; /* Light Blue for Navbar */
+}
+
+/* Light Mode Navbar */
+.light-mode .navbar {
+    background-color: var(--navbar-bg); /* Updated Navbar background for light mode */
+    color: var(--primary-text-color); /* Dark text color for readability */
+}
+
+/* Light Mode Navbar Link Styles */
+.light-mode .navbar a {
+    color: var(--primary-text-color); /* Dark text links */
+}
+
+.light-mode .navbar a:hover {
+    background-color: var(--toggle-bg); /* Vivid Blue hover background */
+    color: var(--secondary-text-color); /* Softer gray text on hover */
+}
+
+/* Light Mode Button Styles */
+.light-mode button {
+    background-color: var(--foreground-color); /* Soft blue for buttons */
+    color: var(--secondary-text-color); /* Softer gray text */
+}
+
+.light-mode button:hover {
+    background-color: var(--toggle-bg); /* Vivid Blue hover effect */
+    color: var(--primary-text-color); /* Darker text on hover */
+}
+
+/* Light Mode Link Hover Effects */
+a.primary-link:hover {
+    background-color: var(--toggle-bg); /* Vivid Blue background on hover */
+    color: var(--secondary-text-color); /* Softer gray text on hover */
+}
+
+/* Header Styles */
+header {
+    background-color: var(--foreground-color); /* Soft blue header */
+    color: var(--secondary-text-color); /* Softer gray text */
+    padding: 1rem;
+}
+
+/* Sidebar Styles */
+.sidebar {
+    background-color: var(--background-color); /* Soft white sidebar */
+    color: var(--primary-text-color); /* Dark text in sidebar */
+    padding: 1rem;
+}
+
+.sidebar a {
+    color: var(--foreground-color); /* Soft blue links in sidebar */
+}
+
+.sidebar a:hover {
+    background-color: var(--toggle-bg); /* Vivid blue hover effect */
+    color: var(--secondary-text-color); /* Softer gray text on hover */
+}
+
+/* Button Styles */
+
+/* Primary Button */
+button.primary {
+    background-color: var(--foreground-color);
+    color: var(--secondary-text-color);
+}
+
+button.primary:hover {
+    background-color: var(--toggle-bg);
+}
+
+/* Secondary Button */
+button.secondary {
+    background-color: var(--toggle-bg);
+    color: var(--primary-text-color);
+}
+
+button.secondary:hover {
+    background-color: var(--foreground-color);
+    color: var(--secondary-text-color);
+}
+
+/* Success Button */
+button.success {
+    background-color: var(--success-color);
+    color: var(--secondary-text-color);
+}
+
+button.success:hover {
+    background-color: var(--highlight-color);
+}
+
+/* Error Button */
+button.error {
+    background-color: var(--error-color);
+    color: var(--secondary-text-color);
+}
+
+button.error:hover {
+    background-color: var(--foreground-color);
+    color: var(--primary-text-color);
+}
