@@ -1,7 +1,7 @@
 import axios from 'axios';
 import React, { useEffect, useState } from 'react';
 import AssignmentAll from './AssignmentAll';
-import Tabcategories from '../../Component/Tabcategories';
+
 
 const Assignment = () => {
   const [assignments, setAssignments] = useState([]);
@@ -26,7 +26,7 @@ const Assignment = () => {
   return (
     <div className='p-2' >
       <h1 className='text-3xl font-bold text-cyan-500 py-8'>Total_Assainment_({assignments.length})</h1>
-      <Tabcategories></Tabcategories>
+    
       <div className='grid  rounded-lg lg:grid-cols-2 md:grid-cols-2 grid-cols-1 gap-8'>
         {assignments.map((assignment) => (
           <AssignmentAll key={assignment._id} fetchdata={ fetchAllAssignments} assignment={assignment} />

@@ -10,6 +10,7 @@ import MyAssainment from "../Pages/MyAssainment/MyAssainment";
 import AssignmentDetails from "../Pages/View";
 import PendingAssignment from "../Pages/PendingAssignment";
 import UpdateAssainment from "../Pages/UpdateAssainment";
+import Searchingassingment from "../Pages/Searchingassingment";
 
 const router = createBrowserRouter([
   {
@@ -40,6 +41,10 @@ const router = createBrowserRouter([
       {
         path:'/assignments/update-assignment/:id',
         element:<UpdateAssainment></UpdateAssainment>
+      },
+      {
+        path:'/search',
+        element:<Searchingassingment></Searchingassingment>
       },
       {
         path:'/pending-assignments',

@@ -180,6 +180,12 @@ const Navbar = () => {
                   Create Assignment
                 </Link>
                 <Link
+                  to="/search"
+                  className="block py-2 px-4 mb-2   whitespace-nowrap text-gray-700 hover:bg-cyan-500"
+                >
+                  All Assignment
+                </Link>
+                <Link
                   to="/my-attempted-assignments"
                   className="block py-2 px-4 mb-2   whitespace-nowrap text-gray-700 hover:bg-cyan-500"
                 >
