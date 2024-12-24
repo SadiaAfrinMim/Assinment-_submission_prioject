@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import Singsearch from './Singsearch';
+import { FaBookAtlas } from 'react-icons/fa6';
 
 const Searchingassingment = () => {
   const [assignments, setAssignments] = useState([]);
@@ -15,9 +16,7 @@ const Searchingassingment = () => {
     const fetchAllAssignments = async () => {
         
           // Send search and filter as query parameters
-          const { data } = await axios.get(`${import.meta.env.VITE_API_URL}/assignments?filter=${filter}&search=${search}`, {
-           
-          });
+          const { data } = await axios.get(`${import.meta.env.VITE_API_URL}/assignment?filter=${filter}&search=${search}`);
           setAssignments(data); // Set assignments in state
       
       };
@@ -25,7 +24,8 @@ const Searchingassingment = () => {
     fetchAllAssignments();
   }, [search, filter]); // Trigger re-fetch when search or filter changes
 
- 
+ console.log(filter)
+ console.log(search)
 
 
   return (
@@ -33,7 +33,8 @@ const Searchingassingment = () => {
       <h1 className='text-3xl font-bold text-cyan-500 py-8'>Total_Assignment_({assignments.length})</h1>
       
       {/* Search and Filter Section */}
-      <div className="join">
+     <div className=" flex justify-center items-center my-6" >
+     <div className="join ">
         <div>
           <input
             className="input input-bordered join-item"
@@ -42,7 +43,7 @@ const Searchingassingment = () => {
             onChange={e=>setSearch(e.target.value)} // Handle search input change
           />
         </div>
-        <div>
+        <div >
           <select
             className="select select-bordered join-item"
                 name='category'
@@ -60,7 +61,7 @@ const Searchingassingment = () => {
           </select>
         </div>
         <div className="indicator">
-          <span className="indicator-item badge badge-secondary">new</span>
+          <span className="indicator-item  border-cyan-500 bg-cyan-500 badge badge-secondary"><FaBookAtlas  className='text-white  '/></span>
           {/* No need for onClick to fetch data since useEffect handles it */}
           <button
             className="btn join-item"
@@ -70,6 +71,7 @@ const Searchingassingment = () => {
         </div>
       </div>
 
+     </div>
       {/* Display Assignments */}
       <div className='grid rounded-lg lg:grid-cols-2 md:grid-cols-2 grid-cols-1 gap-8'>
         {assignments.map((assignment) => (
