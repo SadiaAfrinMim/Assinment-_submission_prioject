@@ -79,7 +79,7 @@ const AssignmentAll = ({ assignment,fetchdata }) => {
             <Link to={`/update-assainment/${_id}`} className="btn join-item " ><FaPenToSquare  className='text-3xl font-bold' /></Link>
             <button onClick={() => setDeleteModalOpen(true)} className="btn join-item bg-[#06B6D4] text-white"><MdDeleteSweep className='text-3xl font-bold ' /></button>
        
-        </div>
+      </div>
     
       </div>
 

@@ -26,12 +26,12 @@ const AssignmentSubmissionModal = ({ assignmentId, dueDate, onClose, title, crea
     }
 
     // Check if the action is permitted
-    if (createdBy === user.email) {
-      toast.error('Action is not permitted');
-      onClose(); // Close the modal automatically if the action is not permitted
-      setIsLoading(false);
-      return;
-    }
+    // if (createdBy === user.email) {
+    //   toast.error('Action is not permitted');
+    //   onClose(); // Close the modal automatically if the action is not permitted
+    //   setIsLoading(false);
+    //   return;
+    // }
 
     try {
       await axios.post(`${import.meta.env.VITE_API_URL}/submit-assignment`, {

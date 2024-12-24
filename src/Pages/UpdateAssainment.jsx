@@ -1,17 +1,14 @@
 import React, { useContext, useState, useEffect } from 'react';
 import axios from 'axios';
-import toast from 'react-hot-toast';
+import toast from 'react-hot-toast'; // Import react-hot-toast
 import { useParams } from 'react-router-dom';
-
 import DatePicker from 'react-datepicker';
 import { AuthContext } from '../Authprovider/Authprovider';
-
 
 const UpdateAssignment = () => {
   const { user } = useContext(AuthContext); // Auth context for user info
   const { id } = useParams(); // Assignment ID from route
   
-
   const [formData, setFormData] = useState({
     title: '',
     description: '',
@@ -39,7 +36,7 @@ const UpdateAssignment = () => {
         dueDate: data.dueDate ? new Date(data.dueDate) : new Date(),
       });
     } catch (error) {
-      toast.error('Failed to load assignment data. Please try again.');
+      toast.error('Failed to load assignment data. Please try again.'); // Show error toast
     }
   };
 
@@ -56,23 +53,23 @@ const UpdateAssignment = () => {
     e.preventDefault();
     const assignmentData = {
       ...formData,
-      email: user?.email || 'unknown',
+      email: user?.email || 'unknown', // Include the email here
       dueDate: formData.dueDate.toISOString(),
     };
 
     try {
       const { data } = await axios.put(
-        `${import.meta.env.VITE_API_URL}/assignments/${id}`,
+        `${import.meta.env.VITE_API_URL}/assignments/${id}/${user?.email}`, // Pass email in the URL
         assignmentData
       );
 
       if (data.success) {
-        toast.success('Assignment updated successfully!');
+        toast.success('Assignment updated successfully!'); // Success toast
       } else {
-        toast.error(data.message || 'Failed to update assignment.');
+        toast.error(data.message || 'Failed to update assignment.'); // Error toast
       }
     } catch (error) {
-      toast.error('An error occurred while updating the assignment.');
+      toast.error('You are not authorized to update this assignment'); // Show unauthorized toast
     }
   };
 
