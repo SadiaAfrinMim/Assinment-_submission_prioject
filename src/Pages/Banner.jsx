@@ -47,7 +47,7 @@ const Banner = () => {
     setActiveSlide((prev) => (prev - 1 + slides.length) % slides.length);
 
   return (
-    <div className="relative w-full pb-10">
+    <div className="relative w-full overflow-hidden pb-10">
       <div className="relative w-full h-[500px]">
         {slides.map((slide, index) => (
           <div

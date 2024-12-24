@@ -16,7 +16,7 @@ const PendingAssignment = () => {
       try {
         const { data } = await axios.get(`${import.meta.env.VITE_API_URL}/submit-assignment`);
         const filteredAssignments = data.filter(
-          (assignment) => assignment.status === 'pending' && assignment.createdBy !== user?.email
+          (assignment) => assignment.status === 'pending' && assignment.createdBy !== user.email
         );
         setPendingAssignments(filteredAssignments);
       } catch (error) {
@@ -39,28 +39,25 @@ const PendingAssignment = () => {
     }
 
     try {
-      // Mark the assignment
-      await axios.post(`${import.meta.env.VITE_API_URL}/mark-assignment`, {
+      // Update assignment status to 'completed' after marking
+      await axios.post(`${import.meta.env.VITE_API_URL}/submit-assignment`, {
+        
         assignmentId: selectedAssignment.assignmentId,
         marks,
         feedback,
+       
       });
 
-      // Update the status to 'completed'
-      await axios.patch(`${import.meta.env.VITE_API_URL}/status-update/${selectedAssignment._id}`, {
-        status: 'completed', // Update status
-      });
-
-      toast.success('Assignment marked and status updated successfully!');
+      toast.success('Assignment marked successfully!');
       setIsModalOpen(false); // Close the modal
 
-      // Remove the marked assignment from the pending list
+      // Update pending assignments to remove the marked assignment
       setPendingAssignments((prevAssignments) =>
         prevAssignments.filter((assignment) => assignment._id !== selectedAssignment._id)
       );
     } catch (error) {
-      console.error('Error marking assignment or updating status', error);
-      toast.error('Failed to mark the assignment or update status');
+      console.error('Error marking assignment', error);
+      toast.error('Failed to mark the assignment');
     }
   };
 

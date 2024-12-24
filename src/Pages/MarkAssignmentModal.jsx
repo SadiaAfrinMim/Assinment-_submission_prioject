@@ -1,38 +1,61 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import toast from 'react-hot-toast';
 
-const MarkAssignmentModal = ({ assignment,status, onClose, onStatusChange }) => {
-  const [marks, setMarks] = useState('');
-  const [feedback, setFeedback] = useState('');
-  const [isSubmitting, setIsSubmitting] = useState(false);
+const MarkAssignmentModal = ({ assignment, onClose, onStatusChange }) => {
+  const [marks, setMarks] = useState(''); // Marks state
+  const [feedback, setFeedback] = useState(''); // Feedback state
+  const [isSubmitting, setIsSubmitting] = useState(false); // To track submission status
+  const [currentAssignment, setCurrentAssignment] = useState(assignment); // To store the current assignment
 
+  // When the assignment prop changes, update the currentAssignment, marks, and feedback
+  useEffect(() => {
+    if (assignment && assignment._id) {
+      setCurrentAssignment(assignment);
+      setMarks(assignment.marks || ''); // Initialize with existing marks
+      setFeedback(assignment.feedback || ''); // Initialize with existing feedback
+    }
+  }, [assignment]);
+
+  // Handle form submission
   const handleSubmit = async (e) => {
-    e.preventDefault();
-    setIsSubmitting(true);
+    e.preventDefault(); // Prevent the default form submission
+
+    setIsSubmitting(true); // Set submitting state to true
 
     try {
-      // Send the marks, feedback, and status update (completed)
-      await axios.post(`${import.meta.env.VITE_API_URL}/mark-assignment`, {
-        link: assignment.googleDocsLink,
-        quickNote: assignment.quickNote,
-        mark: assignment.marks,
-        createdBy: assignment.email,
-        email: assignment.myemail,
-        assignmentId: assignment._id,
+      // Prepare the updated data
+      const updatedData = {
+        assignmentId: currentAssignment.assignmentId,
+        title: currentAssignment.title,
         marks,
         feedback,
-        status: 'completed', // Update status to completed
-      });
+        googleDocsLink: currentAssignment.googleDocsLink,
+        quickNote: currentAssignment.quickNote,
+        status: 'completed', // Mark assignment as completed
+        createdBy: currentAssignment.createdBy,
+        myemail: currentAssignment.myemail,
+        name: currentAssignment.name,
+        dueDate: currentAssignment.dueDate,
+      };
 
+      // Send the updated data to the backend (PUT request to update the assignment)
+      await axios.put(`${import.meta.env.VITE_API_URL}/submit-assignment/${currentAssignment._id}`, updatedData);
+
+      // Show success toast
       toast.success('Assignment marked successfully!');
-      onStatusChange('completed'); // Call parent function to update the status in the list
-      onClose(); // Close the modal
+
+      // Call the parent function to update the status in the list
+      onStatusChange('completed');
+
+      // Close the modal after submission
+      onClose();
     } catch (error) {
       console.error('Error marking assignment:', error);
+      // Show error toast
       toast.error('Failed to mark assignment. Please try again later.');
     } finally {
-      setIsSubmitting(false);
+      setIsSubmitting(false); // Reset submitting state
     }
   };
 
@@ -41,31 +64,36 @@ const MarkAssignmentModal = ({ assignment,status, onClose, onStatusChange }) => 
       <div className="modal-box">
         <h2 className="text-xl font-bold mb-4">Mark Assignment</h2>
 
-        <p><strong>Google Docs Link:</strong> <a href={assignment.googleDocsLink} target="_blank" rel="noopener noreferrer">{assignment.googleDocsLink}</a></p>
-        <p><strong>Quick Note:</strong> {assignment.quickNote}</p>
+        {/* Display the assignment details */}
+        <p><strong>Google Docs Link:</strong> <a href={currentAssignment.googleDocsLink} target="_blank" rel="noopener noreferrer">{currentAssignment.googleDocsLink}</a></p>
+        <p><strong>Quick Note:</strong> {currentAssignment.quickNote}</p>
 
+        {/* Assignment form */}
         <form onSubmit={handleSubmit} className="space-y-4">
+          {/* Marks input field */}
           <div className="form-control">
             <label className="label">Marks</label>
             <input
               type="number"
               className="input input-bordered w-full"
               value={marks}
-              onChange={(e) => setMarks(e.target.value)}
+              onChange={(e) => setMarks(e.target.value)} // Update marks state
               required
             />
           </div>
 
+          {/* Feedback input field */}
           <div className="form-control">
             <label className="label">Feedback</label>
             <textarea
               className="textarea textarea-bordered w-full"
               value={feedback}
-              onChange={(e) => setFeedback(e.target.value)}
+              onChange={(e) => setFeedback(e.target.value)} // Update feedback state
               rows="4"
             />
           </div>
 
+          {/* Modal actions */}
           <div className="modal-action">
             <button
               type="button"
