@@ -8,7 +8,7 @@ const Mainlayout = () => {
     const { isDark,setIsDark } = useContext(AuthContext);
     return (
         
-            <div className='' data-theme={isDark ? "dark" : "light"}  isChecked={isDark} handleChange={() => setIsDark(!isDark)}>
+            <div className='space-y-8' data-theme={isDark ? "dark" : "light"}  isChecked={isDark} handleChange={() => setIsDark(!isDark)}>
             <Navbar></Navbar>
             <Outlet></Outlet>
             <Footer></Footer>

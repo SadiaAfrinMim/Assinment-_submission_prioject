@@ -1,11 +1,18 @@
-import React, { useState, useContext } from "react";
+import React, { useState, useContext, useEffect } from "react";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import axios from "axios";
 import toast from "react-hot-toast";
 import { AuthContext } from "../Authprovider/Authprovider";
+import AOS from 'aos';
+import 'aos/dist/aos.css';
+import { useNavigate } from "react-router-dom";
 
 const CreateAssignment = () => {
+  const navigate = useNavigate()
+  useEffect(() => {
+    AOS.init({ duration: 2000 });  // Customize the duration for animations
+  }, []);
   const { user } = useContext(AuthContext); // Get user info
   const [formData, setFormData] = useState({
     title: "",
@@ -37,23 +44,15 @@ const CreateAssignment = () => {
     };
 
     try {
-      const response = await axios.post(
+     await axios.post(
         `${import.meta.env.VITE_API_URL}/assignments`,
         assignmentData
       );
-      if (response.status === 201) {
-        toast.success(
-          `Assignment created successfully by ${user?.displayName || "Anonymous"} (${user?.email || "No email"})!`
-        );
-        setFormData({
-          title: "",
-          description: "",
-          marks: "",
-          thumbnail: "",
-          difficulty: "Easy",
-          dueDate: new Date(),
-        });
-      }
+      toast.success(
+        "Assignment created successfully"
+      );
+      navigate('/assignments')
+    
     } catch (error) {
       console.error("Error creating assignment:", error); // Debug log
       toast.error("Failed to create assignment!");
@@ -61,7 +60,7 @@ const CreateAssignment = () => {
   };
 
   return (
-    <div className="container mx-auto p-6 my-12 border border-white shadow-md rounded-md">
+    <div data-aos="fade-left" className="container overflow-hidden mx-auto p-6 my-12 border border-white shadow-md rounded-md">
       <h2 className="text-2xl font-bold mb-6">Create Assignment</h2>
       <form onSubmit={handleSubmit} className="space-y-6">
         {/* Row 1 */}

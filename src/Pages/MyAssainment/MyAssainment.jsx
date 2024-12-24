@@ -4,8 +4,14 @@ import { AuthContext } from '../../Authprovider/Authprovider'; // Importing the 
 import toast from 'react-hot-toast';
 import { useParams } from 'react-router-dom';
 import { FaEye } from 'react-icons/fa6';
+import AOS from 'aos';
+import 'aos/dist/aos.css'; // Import AOS CSS
 
 const MyAssignment = () => {
+    useEffect(() => {
+      AOS.init({ duration: 2000 });  // Customize the duration for animations
+    }, []);
+  
   const { id } = useParams(); // Retrieve params (if needed)
   const { user } = useContext(AuthContext); // Get the logged-in user info
   const [assignments, setAssignments] = useState([]); // State to hold assignments
@@ -18,7 +24,7 @@ const MyAssignment = () => {
         const { data } = await axios.get(`${import.meta.env.VITE_API_URL}/submit-assignment`);
 
         // Filter assignments for the logged-in user
-        const userAssignments = data.filter((assignment) => assignment.myemail === user.email);
+        const userAssignments = data.filter((assignment) => assignment.myemail === user?.email);
         setAssignments(userAssignments); // Set user-specific assignments
       } catch (error) {
         console.error('Error fetching submitted assignments:', error);
@@ -29,19 +35,19 @@ const MyAssignment = () => {
     };
 
     fetchMyAssignments();
-  }, [user.email]); // Dependency array ensures re-run if user.email changes
+  }, [user?.email]); // Dependency array ensures re-run if user.email changes
 
   return (
     <div className="container mx-auto p-4">
-      <h2 className="text-2xl font-bold mb-4">My Submitted Assignments ({assignments.length})</h2>
+      <h2 className="text-2xl font-bold text-cyan-500 mb-4">My Submitted Assignments ({assignments?.length})</h2>
 
       {/* Loading state */}
       {isLoading ? (
         <p>Loading assignments...</p>
-      ) : assignments.length === 0 ? (
+      ) : assignments?.length === 0 ? (
         <p>No assignments submitted yet.</p>
       ) : (
-        <table className="table-auto w-full text-center border-collapse">
+        <table  data-aos="fade-down" className="table-auto overflow-hidden  w-full text-center border-collapse">
           <thead>
             <tr className="animate-fade-in">
               <th className="border-b p-2">Assignment Title</th>
@@ -53,34 +59,33 @@ const MyAssignment = () => {
             </tr>
           </thead>
           <tbody>
-            {assignments.map((assignment) => (
-              <tr key={assignment._id} className="hover:bg-gray-100 transition-colors duration-300">
-                <td className="border-b p-2">{assignment.title}</td>
+            {assignments?.map((assignment) => (
+              <tr key={assignment?._id} className="hover:bg-gray-100 transition-colors duration-300">
+                <td className="border-b p-2">{assignment?.title}</td>
                 <td className="border-b p-2">
                   <span
                     className={`${
-                      assignment.status === 'completed' ? 'text-green-500' : 'text-yellow-500'
+                      assignment?.status === 'completed' ? 'text-green-500' : 'text-yellow-500'
                     } animate-pulse`}
                   >
-                    {assignment.status}
+                    {assignment?.status}
                   </span>
                 </td>
-                <td className="border-b p-2">{assignment.mark || 'N/A'}</td>
-                <td className="border-b p-2">{assignment.marks || 'N/A'}</td>
-                <td className="border-b p-2">{assignment.feedback || 'N/A'}</td>
+                <td className="border-b p-2">{assignment?.mark || 'N/A'}</td>
+                <td className="border-b p-2">{assignment?.marks || 'N/A'}</td>
+                <td className="border-b p-2">{assignment?.feedback || 'N/A'}</td>
                 <td className="border-b p-2">
-  <div className="flex justify-center items-center">
-    <a
-      href={assignment.googleDocsLink}
-      target="_blank"
-      rel="noopener noreferrer"
-      className="text-blue-500 animate-bounce"
-    >
-      <FaEye className="text-3xl font-bold"></FaEye>
-    </a>
-  </div>
-</td>
-
+                  <div className="flex justify-center items-center">
+                    <a
+                      href={assignment?.googleDocsLink}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="text-blue-500 animate-bounce"
+                    >
+                      <FaEye className="text-3xl font-bold" />
+                    </a>
+                  </div>
+                </td>
               </tr>
             ))}
           </tbody>

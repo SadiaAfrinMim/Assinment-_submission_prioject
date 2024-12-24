@@ -1,6 +1,11 @@
-import React from "react";
+import React, { useEffect } from "react";
+import AOS from 'aos';
+import 'aos/dist/aos.css';
 
 const OnlineAdvantage = () => {
+  useEffect(() => {
+    AOS.init({ duration: 2000 });  // Customize the duration for animations
+  }, []);
   const advantages = [
     {
       title: "Real-Time Collaboration",
@@ -29,7 +34,7 @@ const OnlineAdvantage = () => {
   ];
 
   return (
-    <div className=" py-12">
+    <div data-aos="zoom-in"  className=" py-12">
       <h2 className="text-3xl font-bold text-center text-[#06B6D4] mb-8">
         Why Choose Online Group Study?
       </h2>

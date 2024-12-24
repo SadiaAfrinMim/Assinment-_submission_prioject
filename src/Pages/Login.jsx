@@ -6,8 +6,13 @@ import toast from 'react-hot-toast'
 import { AuthContext } from '../Authprovider/Authprovider'
 import { useLottie } from "lottie-react";
 import animation from '../assets/porasuna 1734807272196.json'
+import AOS from 'aos';
+import 'aos/dist/aos.css';
 
 const Login = () => {
+  useEffect(() => {
+    AOS.init({ duration: 2000 });  // Customize the duration for animations
+  }, []);
   const navigate = useNavigate()
   const location = useLocation()
   const from = location?.state || '/'
@@ -59,7 +64,7 @@ const Login = () => {
   }
 
   return (
-    <div className='flex justify-center items-center min-h-[calc(100vh-306px)] my-12'>
+    <div data-aos="zoom-in" className='flex overflow-hidden justify-center items-center min-h-[calc(100vh-306px)] my-12'>
       <div className='flex w-full max-w-sm mx-auto overflow-hidden border border-white
        rounded-lg shadow-lg  lg:max-w-4xl '>
         <div

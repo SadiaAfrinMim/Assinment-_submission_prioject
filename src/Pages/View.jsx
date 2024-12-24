@@ -45,7 +45,7 @@ const AssignmentDetails = () => {
               </p>
               {assignment.dueDate && (
                 <p className="text-sm">
-                  <strong>Due Date:</strong> {format(new Date(assignment.dueDate), 'Pp')}
+                  <strong>Due Date:</strong> {format(new Date(assignment.dueDate), 'p')}
                   {/* 'Pp' will show full date and time */}
                 </p>
               )}

@@ -1,4 +1,4 @@
-import React, { useState, useContext } from 'react';
+import React, { useState, useContext, useEffect } from 'react';
 import axios from 'axios';
 import toast from 'react-hot-toast';
 import { Link } from 'react-router-dom';
@@ -6,9 +6,15 @@ import { AuthContext } from '../../Authprovider/Authprovider'; // Assuming AuthC
 import { FaPenToSquare } from "react-icons/fa6";
 import { FaEye } from "react-icons/fa";
 import { MdDeleteSweep } from "react-icons/md";
+import AOS from 'aos';
+import 'aos/dist/aos.css';
 
-const AssignmentAll = ({ assignment,fetchdata }) => {
-  const { user } = useContext(AuthContext); // Accessing the logged-in user info
+const AssignmentAll = ({ assignment, fetchdata }) => {
+  useEffect(() => {
+    AOS.init({ duration: 2000 });  // Customize the duration for animations
+  }, []);
+
+  const { user } = useContext(AuthContext);
   const {
     _id,
     title,
@@ -22,67 +28,75 @@ const AssignmentAll = ({ assignment,fetchdata }) => {
 
   const [isDeleteModalOpen, setDeleteModalOpen] = useState(false);
 
-  // Function to handle the delete action
   const handleDelete = async () => {
     try {
-      // Make a request to delete the assignment
       const response = await axios.delete(
         `${import.meta.env.VITE_API_URL}/assignments/${_id}/${user.email}`
       );
-      
+
       if (response.status === 200) {
-        // Successfully deleted, close the modal and show success message
         setDeleteModalOpen(false);
         toast.success('Assignment deleted successfully!');
-        fetchdata()
+        fetchdata();
       }
     } catch (error) {
       toast.error('Failed to delete the assignment!');
     }
   };
 
-  // Function to handle canceling the delete action
   const cancelDelete = () => {
     setDeleteModalOpen(false);
   };
 
+  const legthOfText = (text, length) => {
+    return text.length > length ? `${text.substring(0, length)}...` : text;
+  };
+
   return (
-    <div className="  border-white border-x rounded-lg border-t bg-base-100 shadow-xl">
-    <div className='flex h-52 items-center justify-between   border-b-4 rounded-lg border-cyan-500'>
-    <div>
-     
-        <img src={thumbnail} alt={title} className="h-52 w-72 object-cover rounded-l-lg rounded-r-none" />
-      
-      </div>
-      <div>
-      <div className="card-body">
-        <h2 className="card-title">{title}</h2>
-        <p>{description}</p>
-        <p className="text-sm">
-          <strong>Marks: </strong>{marks} <br />
-          <strong>Difficulty: </strong>{difficulty}
-        </p>
-        <p className="text-sm">
-          <strong>Due Date: </strong>{new Date(dueDate).toLocaleString()}
-        </p>
-        <p className="text-sm">
-          <strong>Created by: </strong>{createdBy?.displayName}
-        </p>
-        <p className="text-sm">
-          <strong>Email: </strong>{createdBy?.email}
-        </p>
-     </div>
-     </div>
-        
-          <div className="join join-vertical">
-            <Link to={`/details/${_id}`} className="btn join-item bg-[#06B6D4] text-white"><FaEye className='text-3xl font-bold' /></Link>
-            <Link to={`/update-assainment/${_id}`} className="btn join-item " ><FaPenToSquare  className='text-3xl font-bold' /></Link>
-            <button onClick={() => setDeleteModalOpen(true)} className="btn join-item bg-[#06B6D4] text-white"><MdDeleteSweep className='text-3xl font-bold ' /></button>
-       
-      </div>
-    
+    <div data-aos="zoom-in"  className="border-white overflow-hidden  border-x rounded-lg border-t bg-base-100 shadow-xl mb-4">
+      <div className="lg:flex md:flex flex-1 gap-8 items-center justify-between border-b-4 rounded-lg border-cyan-500 p-4">
+        {/* Image */}
+        <div className=" mb-4 lg:mb-0">
+          <img src={thumbnail} alt={title} className="w-full h-64  object-cover rounded-lg" />
+        </div>
+
+        {/* Assignment Info */}
+        <div className="w-full flex-1 ">
+          <div className="">
+            <h2 className="card-title text-xl font-semibold">{legthOfText(title, 30)}</h2>
+            <p>{legthOfText(description, 60)}</p>
+            <p className="text-sm mt-2">
+              <strong>Marks: </strong>{marks} <br />
+              <strong>Difficulty: </strong>{difficulty}
+            </p>
+            <p className="text-sm">
+              <strong>Due Date: </strong>{new Date(dueDate).toLocaleString()}
+            </p>
+            <p className="text-sm">
+              <strong>Created by: </strong>{createdBy?.displayName}
+            </p>
+            <p className="text-sm whitespace-nowrap">
+              <strong>Email: </strong>{createdBy?.email}
+            </p>
+         
+
+          {/* Action Buttons */}
+          <div className="flex space-x-2 mt-4">
+            <Link to={`/details/${_id}`} className="btn bg-[#06B6D4] text-white flex items-center justify-center p-2 rounded-md hover:bg-[#03879a] transition duration-300">
+              <FaEye className="text-2xl font-bold" />
+            </Link>
+            <Link to={`/update-assignment/${_id}`} className="btn bg-yellow-600 text-white flex items-center justify-center p-2 rounded-md hover:bg-yellow-500 transition duration-300">
+              <FaPenToSquare className="text-2xl font-bold" />
+            </Link>
+            <button onClick={() => setDeleteModalOpen(true)} className="btn bg-red-600 text-white flex items-center justify-center p-2 rounded-md hover:bg-red-500 transition duration-300">
+              <MdDeleteSweep className="text-2xl font-bold" />
+            </button>
+            </div>
+          </div>
+        </div>
       </div>
 
+      {/* Delete Modal */}
       {isDeleteModalOpen && (
         <div className="modal modal-open">
           <div className="modal-box">

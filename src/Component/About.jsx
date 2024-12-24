@@ -1,8 +1,14 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { useLottie } from "lottie-react";
 import online from '../assets/online - 1734813939712.json';
+import AOS from 'aos';
+import 'aos/dist/aos.css'; // Import AOS CSS
 
 const About = () => {
+
+  useEffect(() => {
+    AOS.init({ duration: 2000 });  // Customize the duration for animations
+  }, []);
     const options = {
         animationData: online,  // Use the imported animation data
         loop: true,                       // Set loop to true for continuous playback
@@ -16,12 +22,12 @@ const About = () => {
       <div className="container mx-auto px-6 lg:px-20">
         <div className="flex flex-col md:flex-row items-center gap-8">
           {/* Left: Image */}
-          <div className="flex-1">
+          <div data-aos="fade-right" className="flex-1 overflow-hidden">
            {View}
           </div>
 
           {/* Right: Content */}
-          <div className="flex-1">
+          <div  data-aos="fade-left"  className="flex-1 overflow-hidden">
             <h2 className="text-3xl font-bold text-[#06B6D4] mb-4">
               About Us
             </h2>
