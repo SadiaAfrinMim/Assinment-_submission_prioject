@@ -34,11 +34,11 @@ const router = createBrowserRouter([
         element:<MyAssainment></MyAssainment>
       },
       {
-        path:'/details/:id',
+        path:'/assignments/details/:id',
         element:<AssignmentDetails></AssignmentDetails>
       },
       {
-        path:'/update-assignment/:id',
+        path:'/assignments/update-assignment/:id',
         element:<UpdateAssainment></UpdateAssainment>
       },
       {

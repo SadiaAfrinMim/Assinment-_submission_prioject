@@ -82,10 +82,10 @@ const AssignmentAll = ({ assignment, fetchdata }) => {
 
           {/* Action Buttons */}
           <div className="flex space-x-2 mt-4">
-            <Link to={`/details/${_id}`} className="btn bg-[#06B6D4] text-white flex items-center justify-center p-2 rounded-md hover:bg-[#03879a] transition duration-300">
+            <Link to={`/assignments/details/${_id}`} className="btn bg-[#06B6D4] text-white flex items-center justify-center p-2 rounded-md hover:bg-[#03879a] transition duration-300">
               <FaEye className="text-2xl font-bold" />
             </Link>
-            <Link to={`/update-assignment/${_id}`} className="btn bg-yellow-600 text-white flex items-center justify-center p-2 rounded-md hover:bg-yellow-500 transition duration-300">
+            <Link to={`/assignments/update-assignment/${_id}`} className="btn bg-yellow-600 text-white flex items-center justify-center p-2 rounded-md hover:bg-yellow-500 transition duration-300">
               <FaPenToSquare className="text-2xl font-bold" />
             </Link>
             <button onClick={() => setDeleteModalOpen(true)} className="btn bg-red-600 text-white flex items-center justify-center p-2 rounded-md hover:bg-red-500 transition duration-300">

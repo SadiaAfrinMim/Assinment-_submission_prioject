@@ -1,6 +1,6 @@
 import { Link, useLocation, useNavigate } from 'react-router-dom'
 
-import { useContext } from 'react'
+import { useContext, useEffect } from 'react'
 
 import toast from 'react-hot-toast'
 import { AuthContext } from '../Authprovider/Authprovider'

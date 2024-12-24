@@ -1,11 +1,12 @@
 import React, { useContext, useState, useEffect } from 'react';
 import axios from 'axios';
 import toast from 'react-hot-toast'; // Import react-hot-toast
-import { useParams } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import DatePicker from 'react-datepicker';
 import { AuthContext } from '../Authprovider/Authprovider';
 
 const UpdateAssignment = () => {
+  const navigate = useNavigate()
   const { user } = useContext(AuthContext); // Auth context for user info
   const { id } = useParams(); // Assignment ID from route
   
@@ -62,9 +63,11 @@ const UpdateAssignment = () => {
         `${import.meta.env.VITE_API_URL}/assignments/${id}/${user?.email}`, // Pass email in the URL
         assignmentData
       );
+      
 
       if (data.success) {
         toast.success('Assignment updated successfully!'); // Success toast
+        navigate('/assignments')
       } else {
         toast.error(data.message || 'Failed to update assignment.'); // Error toast
       }
