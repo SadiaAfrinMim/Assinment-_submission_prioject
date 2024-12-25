@@ -26,7 +26,7 @@ const UpdateAssignment = () => {
   const fetchAssignment = async () => {
     try {
       const { data } = await axios.get(
-        `${import.meta.env.VITE_API_URL}/assignments/${id}`
+        `${import.meta.env.VITE_API_URL}/assignments/${id}`,{withCredentials: true}
       );
       setFormData({
         title: data.title || '',
@@ -61,7 +61,7 @@ const UpdateAssignment = () => {
     try {
       const { data } = await axios.put(
         `${import.meta.env.VITE_API_URL}/assignments/${id}/${user?.email}`, // Pass email in the URL
-        assignmentData
+        assignmentData,{withCredentials:true}
       );
       
 

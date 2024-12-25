@@ -6,8 +6,10 @@ import { useParams } from 'react-router-dom';
 import { FaEye } from 'react-icons/fa6';
 import AOS from 'aos';
 import 'aos/dist/aos.css'; // Import AOS CSS
+import UseAxiosSecure from '../../Hooks/UseAxiosSecure';
 
 const MyAssignment = () => {
+  const axiosSecure = UseAxiosSecure()
     useEffect(() => {
       AOS.init({ duration: 2000 });  // Customize the duration for animations
     }, []);
@@ -21,11 +23,10 @@ const MyAssignment = () => {
   useEffect(() => {
     const fetchMyAssignments = async () => {
       try {
-        const { data } = await axios.get(`${import.meta.env.VITE_API_URL}/submit-assignment`);
+        const { data } = await axiosSecure.get(`/submit-assignmen/${user?.email}`,{withCredentials:true});
 
-        // Filter assignments for the logged-in user
-        const userAssignments = data.filter((assignment) => assignment.myemail === user?.email);
-        setAssignments(userAssignments); // Set user-specific assignments
+       
+        setAssignments(data); // Set user-specific assignments
       } catch (error) {
         console.error('Error fetching submitted assignments:', error);
         toast.error('Failed to load assignments.');

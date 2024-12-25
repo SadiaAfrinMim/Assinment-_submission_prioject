@@ -21,7 +21,7 @@ const Assignment = () => {
     }
   };
 
-  console.log('ehllo',assignments);
+  
 
   return (
     <div className='p-2' >

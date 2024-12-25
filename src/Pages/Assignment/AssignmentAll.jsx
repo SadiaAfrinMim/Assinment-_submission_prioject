@@ -8,8 +8,10 @@ import { FaEye } from "react-icons/fa";
 import { MdDeleteSweep } from "react-icons/md";
 import AOS from 'aos';
 import 'aos/dist/aos.css';
+import UseAxiosSecure from '../../Hooks/UseAxiosSecure';
 
 const AssignmentAll = ({ assignment, fetchdata }) => {
+  const axiosSecure = UseAxiosSecure()
   useEffect(() => {
     AOS.init({ duration: 2000 });  // Customize the duration for animations
   }, []);
@@ -31,8 +33,8 @@ const AssignmentAll = ({ assignment, fetchdata }) => {
 
   const handleDelete = async () => {
     try {
-      const response = await axios.delete(
-        `${import.meta.env.VITE_API_URL}/assignments/${_id}/${user.email}`
+      const response = await axiosSecure.delete(
+        `/assignments/${_id}/${user.email}`,{withCredentials:true}
       );
 
       if (response.status === 200) {

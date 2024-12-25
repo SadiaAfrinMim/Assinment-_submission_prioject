@@ -11,6 +11,7 @@ const PendingAssignment = () => {
   useEffect(() => {
     AOS.init({ duration: 2000 });  // Customize the duration for animations
   }, []);
+
   const { user } = useContext(AuthContext);
   const [pendingAssignments, setPendingAssignments] = useState([]);
   const [selectedAssignment, setSelectedAssignment] = useState(null);
@@ -22,7 +23,7 @@ const PendingAssignment = () => {
   useEffect(() => {
     const fetchPendingAssignments = async () => {
       try {
-        const { data } = await axios.get(`${import.meta.env.VITE_API_URL}/submit-assignment`);
+        const { data } = await axios.get(`${import.meta.env.VITE_API_URL}/submit-assignment`, { withCredentials: true });
         setPendingAssignments(data);
       } catch (error) {
         console.error('Error fetching pending assignments', error);
@@ -42,6 +43,12 @@ const PendingAssignment = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+
+    // Ensure marks are between 0 and 100
+    if (marks < 0 || marks > 100) {
+      toast.error('Marks must be between 0 and 100');
+      return;
+    }
 
     if (!marks || !feedback) {
       toast.error('Marks and feedback are required');
@@ -65,7 +72,7 @@ const PendingAssignment = () => {
         dueDate: selectedAssignment?.dueDate,
       };
 
-      await axios.put(`${import.meta.env.VITE_API_URL}/submit-assignment/${selectedAssignment?._id}`, updatedData);
+      await axios.put(`${import.meta.env.VITE_API_URL}/submit-assignment/${selectedAssignment?._id}`, updatedData, { withCredentials: true });
       toast.success('Assignment marked successfully!');
 
       setPendingAssignments((prevAssignments) =>
@@ -87,7 +94,7 @@ const PendingAssignment = () => {
 
   return (
     <div className="container mx-auto ">
-      <h2 className="text-3xl text-cyan-500  font-bold mb-4">Pending Assignments_({pendingAssignments.length})</h2>
+      <h2 className="text-3xl text-cyan-500 font-bold mb-4">Pending Assignments_({pendingAssignments.length})</h2>
 
       {pendingAssignments.length === 0 ? (
         <p>No pending assignments to evaluate.</p>
@@ -174,7 +181,13 @@ const PendingAssignment = () => {
                   type="number"
                   className="input input-bordered w-full"
                   value={marks}
-                  onChange={(e) => setMarks(e.target.value)}
+                  onChange={(e) => {
+                    const value = e.target.value;
+                    // Ensure the marks value is between 0 and 100
+                    if (value >= 0 && value <= 100) {
+                      setMarks(value);
+                    }
+                  }}
                   required
                 />
               </div>
@@ -217,3 +230,4 @@ const PendingAssignment = () => {
 };
 
 export default PendingAssignment;
+
