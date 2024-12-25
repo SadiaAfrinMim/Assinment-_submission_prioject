@@ -159,7 +159,7 @@ const Navbar = () => {
               onClick={() => setIsDropdownOpen(!isDropdownOpen)}
             >
               
-              <img
+              <img referrerPolicy='no-referrer'
                 src={user.photoURL}
                 alt="User Avatar"
                 className="w-10 h-10 rounded-full"

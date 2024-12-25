@@ -4,8 +4,10 @@ import { AuthContext } from '../Authprovider/Authprovider';
 import toast from 'react-hot-toast';
 import DatePicker from 'react-datepicker';
 import { compareAsc } from 'date-fns';
+import { useNavigate } from 'react-router-dom';
 
 const AssignmentSubmissionModal = ({ assignmentId, dueDate, onClose, title, createdBy, mark }) => {
+  const nevigate = useNavigate()
   const { user } = useContext(AuthContext);
   const [startdate, setStartDate] = useState(new Date());
   const [googleDocsLink, setGoogleDocsLink] = useState('');
@@ -37,7 +39,9 @@ const AssignmentSubmissionModal = ({ assignmentId, dueDate, onClose, title, crea
         dueDate,
       });
       toast.success('Assignment submitted successfully!');
+     
       onClose(); // Close the modal after successful submission
+      nevigate('/pending-assignments');
     } catch (error) {
       console.error('Error submitting assignment:', error);
       toast.error('Failed to submit assignment. Please try again later.');

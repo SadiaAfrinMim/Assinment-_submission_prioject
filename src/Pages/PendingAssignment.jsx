@@ -8,7 +8,7 @@ import 'aos/dist/aos.css';
 import { useNavigate } from 'react-router-dom';
 
 const PendingAssignment = () => {
-  const nevigate = useNavigate()
+  const navigate = useNavigate();
 
   useEffect(() => {
     AOS.init({ duration: 2000 }); // Initialize animations
@@ -23,7 +23,6 @@ const PendingAssignment = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
 
   useEffect(() => {
-   
     const fetchPendingAssignments = async () => {
       try {
         const { data } = await axios.get(`${import.meta.env.VITE_API_URL}/submit-assignment`, {
@@ -81,7 +80,9 @@ const PendingAssignment = () => {
         updatedData,
         { withCredentials: true }
       );
+
       toast.success('Assignment marked successfully!');
+      navigate('/pending-assignments');
 
       setPendingAssignments((prevAssignments) =>
         prevAssignments.map((assignment) =>
@@ -92,7 +93,6 @@ const PendingAssignment = () => {
       );
 
       setIsModalOpen(false);
-      nevigate('/pending-assignments');
     } catch (error) {
       console.error('Error marking assignment:', error);
       toast.error('Failed to mark assignment. Please try again later.');
@@ -102,37 +102,39 @@ const PendingAssignment = () => {
   };
 
   return (
-    <div className="container mx-auto">
-      <h2 className="text-3xl text-cyan-500 font-bold my-4">
+    <div className=" px-4 sm:px-8">
+      <h2 className="text-2xl sm:text-3xl text-cyan-500 font-bold my-4 text-center sm:text-left">
         Pending Assignments ({pendingAssignments.length})
       </h2>
 
       {pendingAssignments.length === 0 ? (
-        <p>No pending assignments to evaluate.</p>
+        <p className="text-center text-gray-500">No pending assignments to evaluate.</p>
       ) : (
         <div data-aos="fade-up" className="overflow-x-auto">
           <table className="table-auto w-full border-collapse">
             <thead>
-              <tr>
-                <th className="border-b p-2">Assignment Title</th>
-                <th className="border-b p-2">Examinee Name</th>
-                <th className="border-b p-2">Status</th>
-                <th className="border-b p-2">Due Date</th>
-                <th className="border-b p-2">Google Docs Link</th>
-                <th className="border-b p-2">Quick Note</th>
-                <th className="border-b p-2">Action</th>
+              <tr className="text-left">
+                <th className="border-b p-2 sm:p-4 text-sm sm:text-base">Assignment Title</th>
+                <th className="border-b p-2 sm:p-4 text-sm sm:text-base">Examinee Name</th>
+                <th className="border-b p-2 sm:p-4 text-sm sm:text-base">Email</th>
+                <th className="border-b p-2 sm:p-4 text-sm sm:text-base">Status</th>
+                <th className="border-b p-2 sm:p-4 text-sm sm:text-base">Due Date</th>
+                <th className="border-b p-2 sm:p-4 text-sm sm:text-base">Google Docs Link</th>
+                <th className="border-b p-2 sm:p-4 text-sm sm:text-base">Quick Note</th>
+                <th className="border-b p-2 sm:p-4 text-sm sm:text-base">Action</th>
               </tr>
             </thead>
             <tbody>
               {pendingAssignments.map((assignment) => (
-                <tr key={assignment._id}>
-                  <td className="border-b p-2">
+                <tr key={assignment._id} className="text-sm sm:text-base">
+                  <td className="border-b p-2 sm:p-4">
                     {assignment?.title?.length > 20
                       ? `${assignment?.title?.substring(0, 20)}...`
                       : assignment?.title}
                   </td>
-                  <td className="border-b p-2">{assignment?.name}</td>
-                  <td className="border-b p-2">
+                  <td className="border-b p-2 sm:p-4">{assignment?.name}</td>
+                  <td className="border-b p-2 sm:p-4">{assignment?.myemail}</td>
+                  <td className="border-b p-2 sm:p-4">
                     <span
                       className={
                         assignment?.status === 'completed'
@@ -143,32 +145,34 @@ const PendingAssignment = () => {
                       {assignment?.status}
                     </span>
                   </td>
-                  <td className="border-b p-2">
+                  <td className="border-b p-2 sm:p-4">
                     {new Date(assignment?.dueDate).toLocaleDateString()}
                   </td>
-                  <td className="border-b p-2 flex justify-center items-center">
+                  <td className="border-b p-2 sm:p-4 flex justify-center items-center">
                     <a
                       href={assignment?.googleDocsLink}
                       target="_blank"
                       rel="noopener noreferrer"
                       className="text-blue-500"
                     >
-                      <FaEye className="text-3xl font-bold" />
+                      <FaEye className="text-2xl sm:text-3xl font-bold" />
                     </a>
                   </td>
-                  <td className="border-b p-2">{assignment?.quickNote}</td>
-                  <td className="border-b p-2">
+                  <td className="border-b p-2 sm:p-4">
+                    {assignment?.quickNote?.length > 50
+                      ? `${assignment?.quickNote.substring(0, 50)}...`
+                      : assignment?.quickNote}
+                  </td>
+                  <td className="border-b p-2 sm:p-4">
                     <button
-                      className="btn text-white bg-cyan-500"
+                      className="btn text-white bg-cyan-500 w-full sm:w-auto"
                       onClick={() => handleMarkAssignment(assignment)}
                       disabled={
                         assignment?.status === 'completed' ||
                         assignment?.myemail === user?.email
                       }
                     >
-                      {assignment?.myemail === user?.email
-                        ? 'Not Allowed'
-                        : 'Give Mark'}
+                      {assignment?.myemail === user?.email ? 'Not Allowed' : 'Give Mark'}
                     </button>
                   </td>
                 </tr>
@@ -180,10 +184,10 @@ const PendingAssignment = () => {
 
       {isModalOpen && selectedAssignment && (
         <div className="modal modal-open">
-          <div className="modal-box max-w-lg w-full">
-            <h2 className="text-xl font-bold mb-4">Mark Assignment</h2>
+          <div className="modal-box w-full max-w-lg sm:max-w-md">
+            <h2 className="text-lg sm:text-xl font-bold mb-4">Mark Assignment</h2>
 
-            <p>
+            <p className="text-sm sm:text-base">
               <strong>Google Docs Link:</strong>{' '}
               <a
                 href={selectedAssignment?.googleDocsLink}
@@ -193,13 +197,13 @@ const PendingAssignment = () => {
                 {selectedAssignment?.googleDocsLink}
               </a>
             </p>
-            <p>
+            <p className="text-sm sm:text-base">
               <strong>Quick Note:</strong> {selectedAssignment?.quickNote}
             </p>
 
             <form onSubmit={handleSubmit} className="space-y-4">
               <div className="form-control">
-                <label className="label">Marks</label>
+                <label className="label text-sm sm:text-base">Marks</label>
                 <input
                   type="number"
                   className="input input-bordered w-full"
@@ -210,7 +214,7 @@ const PendingAssignment = () => {
               </div>
 
               <div className="form-control">
-                <label className="label">Feedback</label>
+                <label className="label text-sm sm:text-base">Feedback</label>
                 <textarea
                   className="textarea textarea-bordered w-full"
                   value={feedback}
