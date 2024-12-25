@@ -5,6 +5,7 @@ import toast from 'react-hot-toast';
 import { FaEye } from 'react-icons/fa6';
 import AOS from 'aos';
 import 'aos/dist/aos.css'; 
+import { Helmet } from "react-helmet-async";
 
 const PendingAssignment = () => {
 
@@ -93,7 +94,11 @@ const PendingAssignment = () => {
   };
 
   return (
-    <div className="container mx-auto ">
+    <div className="my-8 ">
+      <Helmet>
+    <title>PendingAssaignment || CollabStudy</title>
+  </Helmet>
+      
       <h2 className="text-3xl text-cyan-500 font-bold mb-4">Pending Assignments_({pendingAssignments.length})</h2>
 
       {pendingAssignments.length === 0 ? (
@@ -230,4 +235,3 @@ const PendingAssignment = () => {
 };
 
 export default PendingAssignment;
-

@@ -9,6 +9,7 @@ import animation from '../assets/porasuna 1734807272196.json'
 import AOS from 'aos';
 import 'aos/dist/aos.css';
 import { AuthContext } from '../Authprovider/Authprovider';
+import { Helmet } from 'react-helmet-async';
 
 const Login = () => {
   useEffect(() => {
@@ -66,6 +67,9 @@ const Login = () => {
 
   return (
     <div data-aos="zoom-in" className='flex overflow-hidden justify-center items-center min-h-[calc(100vh-306px)] my-12'>
+       <Helmet>
+          <title>PendingAssaignment || CollabStudy</title>
+        </Helmet>
       <div className='flex w-full max-w-sm mx-auto overflow-hidden border border-white
        rounded-lg shadow-lg  lg:max-w-4xl '>
         <div

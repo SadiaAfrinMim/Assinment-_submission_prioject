@@ -7,6 +7,7 @@ import { FaEye } from 'react-icons/fa6';
 import AOS from 'aos';
 import 'aos/dist/aos.css'; // Import AOS CSS
 import UseAxiosSecure from '../../Hooks/UseAxiosSecure';
+import { Helmet } from 'react-helmet-async';
 
 const MyAssignment = () => {
   const axiosSecure = UseAxiosSecure()
@@ -39,7 +40,10 @@ const MyAssignment = () => {
   }, [user?.email]); // Dependency array ensures re-run if user.email changes
 
   return (
-    <div className="container mx-auto p-4">
+    <div className=" p-4">
+       <Helmet>
+          <title>MySubmittedAssainment || CollabStudy</title>
+        </Helmet>
       <h2 className="text-2xl font-bold text-cyan-500 mb-4">My Submitted Assignments ({assignments?.length})</h2>
 
       {/* Loading state */}

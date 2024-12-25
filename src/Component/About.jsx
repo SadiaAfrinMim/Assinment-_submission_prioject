@@ -18,7 +18,7 @@ const About = () => {
       // Use the useLottie hook to get the View component
       const { View } = useLottie(options); 
   return (
-    <div className=" py-12">
+    <div className=" py-12 overflow-hidden">
       <div className="container mx-auto px-6 lg:px-20">
         <div className="flex flex-col md:flex-row items-center gap-8">
           {/* Left: Image */}

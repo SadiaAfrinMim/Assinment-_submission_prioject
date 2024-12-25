@@ -65,7 +65,7 @@ const CreateAssignment = () => {
   };
 
   return (
-    <div data-aos="fade-left" className="container overflow-hidden mx-auto p-6 my-12 border border-white shadow-md rounded-md">
+    <div data-aos="fade-left" className=" overflow-hidden mx-auto p-6 my-12 border border-white shadow-md rounded-md">
       <h2 className="text-2xl font-bold mb-6">Create Assignment</h2>
       <form onSubmit={handleSubmit} className="space-y-6">
         {/* Row 1 */}

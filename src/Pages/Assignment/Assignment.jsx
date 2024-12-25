@@ -25,6 +25,9 @@ const Assignment = () => {
 
   return (
     <div className='p-2' >
+       <Helmet>
+          <title>AllAssainment || CollabStudy</title>
+        </Helmet>
       <h1 className='text-3xl font-bold text-cyan-500 py-8'>Total_Assainment_({assignments.length})</h1>
     
       <div className='grid  rounded-lg lg:grid-cols-2 md:grid-cols-2 grid-cols-1 gap-8'>

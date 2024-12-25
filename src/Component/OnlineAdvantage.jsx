@@ -34,7 +34,7 @@ const OnlineAdvantage = () => {
   ];
 
   return (
-    <div data-aos="zoom-in"  className=" py-12">
+    <div data-aos="zoom-in"  className=" py-12 overflow-hidden">
       <h2 className="text-3xl font-bold text-center text-[#06B6D4] mb-8">
         Why Choose Online Group Study?
       </h2>

@@ -8,11 +8,13 @@ import "./index.css";
 import router from "./Router/Router";
 import Authprovider from "./Authprovider/Authprovider";
 import { Toaster } from "react-hot-toast";
+import { HelmetProvider } from "react-helmet-async";
 
 
 
 ReactDOM.createRoot(document.getElementById("root")).render(
   <React.StrictMode>
+     <HelmetProvider/>
    <Authprovider>
    <Toaster
   position="top-right"  // Position of the toast

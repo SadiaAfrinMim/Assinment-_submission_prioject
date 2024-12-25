@@ -17,7 +17,7 @@ const FAQ = () => {
       // Use the useLottie hook to get the View component
       const { View } = useLottie(options); 
   return (
-   <div>
+   <div className="overflow-hidden">
      <h1 className="text-3xl text-center font-bold text-cyan-500">Frequently Asked Questions</h1>
      
      <div   className="lg:flex  items-center justify-center gap-8 rounded-md">

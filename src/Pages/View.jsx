@@ -31,7 +31,10 @@ const AssignmentDetails = () => {
   };
 
   return (
-    <div className="container mx-auto p-4">
+    <div className=" p-4">
+       <Helmet>
+          <title>AssaignmentDetails || CollabStudy</title>
+        </Helmet>
       {assignment ? (
         <div className="card shadow-lg bg-base-100">
           <div className="card-body">

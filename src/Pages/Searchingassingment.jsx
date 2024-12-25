@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import Singsearch from './Singsearch';
 import { FaBookAtlas } from 'react-icons/fa6';
+import { Helmet } from 'react-helmet-async';
 
 const Searchingassingment = () => {
   const [assignments, setAssignments] = useState([]);
@@ -35,9 +36,9 @@ const handleReset = () => {
   return (
 
     <div className='p-2'>
-        {/* <Helmet>
-        <title>All_Assainment || CollabStudy</title>
-      </Helmet> */}
+        <Helmet>
+        <title>Searching&Filtering || CollabStudy</title>
+      </Helmet>
       <h1 className='text-3xl font-bold text-cyan-500 py-8'>Total_Assignment_({assignments.length})</h1>
       
       {/* Search and Filter Section */}

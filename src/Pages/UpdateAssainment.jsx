@@ -78,6 +78,9 @@ const UpdateAssignment = () => {
 
   return (
     <div className="container mx-auto p-6 my-12 border border-white shadow-md rounded-md">
+       <Helmet>
+          <title>UpdateAssaignment || CollabStudy</title>
+        </Helmet>
       <h2 className="text-2xl font-bold mb-6">Update Assignment</h2>
       <form onSubmit={handleSubmit} className="space-y-6">
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
