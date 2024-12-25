@@ -26,6 +26,7 @@
     "react-tabs": "^6.1.0",
     "sort-by": "^0.0.2",
     "sweetalert": "^2.1.2",
+    "sweetalert2": "^11.15.3",
     "use-local-storage": "^3.0.0"
   },
   "devDependencies": {

@@ -4,13 +4,14 @@ import { AuthContext } from '../Authprovider/Authprovider';
 import toast from 'react-hot-toast';
 import { FaEye } from 'react-icons/fa6';
 import AOS from 'aos';
-import 'aos/dist/aos.css'; 
-import { Helmet } from "react-helmet-async";
+import 'aos/dist/aos.css';
+import { useNavigate } from 'react-router-dom';
 
 const PendingAssignment = () => {
+  const nevigate = useNavigate()
 
   useEffect(() => {
-    AOS.init({ duration: 2000 });  // Customize the duration for animations
+    AOS.init({ duration: 2000 }); // Initialize animations
   }, []);
 
   const { user } = useContext(AuthContext);
@@ -22,12 +23,15 @@ const PendingAssignment = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
 
   useEffect(() => {
+   
     const fetchPendingAssignments = async () => {
       try {
-        const { data } = await axios.get(`${import.meta.env.VITE_API_URL}/submit-assignment`, { withCredentials: true });
+        const { data } = await axios.get(`${import.meta.env.VITE_API_URL}/submit-assignment`, {
+          withCredentials: true,
+        });
         setPendingAssignments(data);
       } catch (error) {
-        console.error('Error fetching pending assignments', error);
+        console.error('Error fetching pending assignments:', error);
         toast.error('Failed to load pending assignments');
       }
     };
@@ -45,7 +49,6 @@ const PendingAssignment = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    // Ensure marks are between 0 and 100
     if (marks < 0 || marks > 100) {
       toast.error('Marks must be between 0 and 100');
       return;
@@ -73,7 +76,11 @@ const PendingAssignment = () => {
         dueDate: selectedAssignment?.dueDate,
       };
 
-      await axios.put(`${import.meta.env.VITE_API_URL}/submit-assignment/${selectedAssignment?._id}`, updatedData, { withCredentials: true });
+      await axios.put(
+        `${import.meta.env.VITE_API_URL}/submit-assignment/${selectedAssignment?._id}`,
+        updatedData,
+        { withCredentials: true }
+      );
       toast.success('Assignment marked successfully!');
 
       setPendingAssignments((prevAssignments) =>
@@ -85,6 +92,7 @@ const PendingAssignment = () => {
       );
 
       setIsModalOpen(false);
+      nevigate('/pending-assignments');
     } catch (error) {
       console.error('Error marking assignment:', error);
       toast.error('Failed to mark assignment. Please try again later.');
@@ -94,12 +102,10 @@ const PendingAssignment = () => {
   };
 
   return (
-    <div className="my-8 ">
-      <Helmet>
-    <title>PendingAssaignment || CollabStudy</title>
-  </Helmet>
-      
-      <h2 className="text-3xl text-cyan-500 font-bold mb-4">Pending Assignments_({pendingAssignments.length})</h2>
+    <div className="container mx-auto">
+      <h2 className="text-3xl text-cyan-500 font-bold my-4">
+        Pending Assignments ({pendingAssignments.length})
+      </h2>
 
       {pendingAssignments.length === 0 ? (
         <p>No pending assignments to evaluate.</p>
@@ -121,18 +127,25 @@ const PendingAssignment = () => {
               {pendingAssignments.map((assignment) => (
                 <tr key={assignment._id}>
                   <td className="border-b p-2">
-                    {assignment?.title?.length > 20 ? `${assignment?.title?.substring(0, 20)}...` : assignment?.title}
+                    {assignment?.title?.length > 20
+                      ? `${assignment?.title?.substring(0, 20)}...`
+                      : assignment?.title}
                   </td>
-
                   <td className="border-b p-2">{assignment?.name}</td>
                   <td className="border-b p-2">
                     <span
-                      className={assignment?.status === 'completed' ? 'text-green-500' : 'text-yellow-500'}
+                      className={
+                        assignment?.status === 'completed'
+                          ? 'text-green-500'
+                          : 'text-yellow-500'
+                      }
                     >
                       {assignment?.status}
                     </span>
                   </td>
-                  <td className="border-b p-2">{new Date(assignment?.dueDate).toLocaleDateString()}</td>
+                  <td className="border-b p-2">
+                    {new Date(assignment?.dueDate).toLocaleDateString()}
+                  </td>
                   <td className="border-b p-2 flex justify-center items-center">
                     <a
                       href={assignment?.googleDocsLink}
@@ -143,15 +156,19 @@ const PendingAssignment = () => {
                       <FaEye className="text-3xl font-bold" />
                     </a>
                   </td>
-
                   <td className="border-b p-2">{assignment?.quickNote}</td>
                   <td className="border-b p-2">
                     <button
                       className="btn text-white bg-cyan-500"
                       onClick={() => handleMarkAssignment(assignment)}
-                      disabled={assignment?.status === 'completed' || assignment?.createdBy === user?.email}
+                      disabled={
+                        assignment?.status === 'completed' ||
+                        assignment?.myemail === user?.email
+                      }
                     >
-                      {assignment?.createdBy === user?.email ? 'Not Allowed' : 'Give Mark'}
+                      {assignment?.myemail === user?.email
+                        ? 'Not Allowed'
+                        : 'Give Mark'}
                     </button>
                   </td>
                 </tr>
@@ -161,16 +178,18 @@ const PendingAssignment = () => {
         </div>
       )}
 
-      {/* Modal for Marking Assignment */}
       {isModalOpen && selectedAssignment && (
         <div className="modal modal-open">
           <div className="modal-box max-w-lg w-full">
             <h2 className="text-xl font-bold mb-4">Mark Assignment</h2>
 
-            {/* Assignment details */}
             <p>
               <strong>Google Docs Link:</strong>{' '}
-              <a href={selectedAssignment?.googleDocsLink} target="_blank" rel="noopener noreferrer">
+              <a
+                href={selectedAssignment?.googleDocsLink}
+                target="_blank"
+                rel="noopener noreferrer"
+              >
                 {selectedAssignment?.googleDocsLink}
               </a>
             </p>
@@ -179,25 +198,17 @@ const PendingAssignment = () => {
             </p>
 
             <form onSubmit={handleSubmit} className="space-y-4">
-              {/* Marks input */}
               <div className="form-control">
                 <label className="label">Marks</label>
                 <input
                   type="number"
                   className="input input-bordered w-full"
                   value={marks}
-                  onChange={(e) => {
-                    const value = e.target.value;
-                    // Ensure the marks value is between 0 and 100
-                    if (value >= 0 && value <= 100) {
-                      setMarks(value);
-                    }
-                  }}
+                  onChange={(e) => setMarks(e.target.value)}
                   required
                 />
               </div>
 
-              {/* Feedback input */}
               <div className="form-control">
                 <label className="label">Feedback</label>
                 <textarea
@@ -208,7 +219,6 @@ const PendingAssignment = () => {
                 />
               </div>
 
-              {/* Modal actions */}
               <div className="modal-action">
                 <button
                   type="button"

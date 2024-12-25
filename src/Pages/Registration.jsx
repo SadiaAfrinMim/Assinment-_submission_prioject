@@ -7,17 +7,20 @@ import { useLottie } from 'lottie-react';
 import AOS from 'aos';
 import 'aos/dist/aos.css'; // Import AOS CSS
 import { Helmet } from 'react-helmet-async';
+import { FaEye, FaEyeSlash } from 'react-icons/fa'; // Add import for password eye icons
 
 const Registration = () => {
   useEffect(() => {
-    AOS.init({ duration: 2000 });  // Customize the duration for animations
+    AOS.init({ duration: 2000 }); // Customize the duration for animations
   }, []);
+
   const navigate = useNavigate();
-  const { signInWithGoogle, createUser, updateUserProfile, setUser } = useContext(AuthContext);
+  const { signInWithGoogle, createUser, updateUserProfile, setUser, logOut } = useContext(AuthContext);
   const [errorMessage, setErrorMessage] = useState('');
+  const [showPassword, setShowPassword] = useState(false); // Add showPassword state
 
   const options = {
-    animationData: pen,  // Use the imported animation data
+    animationData: pen, // Use the imported animation data
     loop: true,
     autoplay: true,
   };
@@ -41,7 +44,6 @@ const Registration = () => {
 
     if (!validatePassword(pass)) {
       setErrorMessage('Password must contain at least one uppercase letter, one lowercase letter, one number, and be at least 6 characters long.');
-    
       return;
     }
 
@@ -51,6 +53,10 @@ const Registration = () => {
       await updateUserProfile(name, photo);
       setUser({ ...result.user, photoURL: photo, displayName: name });
       toast.success('Signup Successful');
+      
+      // Automatically log out the user after registration and navigate to login
+      await handleLogout();
+      
       setTimeout(() => navigate('/login'), 1500); // Redirect to Login after success
     } catch (err) {
       console.log(err);
@@ -70,20 +76,29 @@ const Registration = () => {
     }
   };
 
+  // Logout Function
+  const handleLogout = async () => {
+    try {
+      await logOut();  // Assuming 'logOut' method from your AuthContext
+      toast.success('You have logged out');
+    } catch (err) {
+      toast.error(err?.message || 'Logout failed!');
+    }
+  };
+
   return (
     <div data-aos="zoom-in" className="flex overflow-hidden justify-center items-center min-h-[calc(100vh-306px)] my-12">
-       <Helmet>
-          <title>Registration || CollabStudy</title>
-        </Helmet>
-      <div className="flex w-full max-w-sm mx-auto overflow-hidden rounded-lg shadow-lg lg:max-w-4xl border border-white ">
+      <Helmet>
+        <title>Registration || CollabStudy</title>
+      </Helmet>
+      <div className="flex w-full max-w-sm mx-auto overflow-hidden rounded-lg shadow-lg lg:max-w-4xl border border-white">
         <div className="w-full px-6 py-8 md:px-8 lg:w-1/2">
           <div className="flex justify-center mx-auto">
-            <img className="w-auto h-7 sm:h-8" src={"https://i.ibb.co.com/4YXfxGq/premium-photo-1674479813017-312c6fe99786.jpg"} alt="" />
           </div>
-          <p className="mt-3 text-xl text-center text-gray-600 ">Get Your Free Account Now.</p>
+          <p className="mt-3 text-xl text-center text-gray-600">Get Your Free Account Now.</p>
           <div
             onClick={handleGoogleSignIn}
-            className="flex cursor-pointer items-center justify-center mt-4 text-gray-600 transition-colors duration-300 transform border rounded-lg hover:bg-gray-50 "
+            className="flex cursor-pointer items-center justify-center mt-4 text-gray-600 transition-colors duration-300 transform border rounded-lg hover:bg-gray-50"
           >
             <div className="px-4 py-2">
               <svg className="w-6 h-6" viewBox="0 0 40 40">
@@ -97,7 +112,7 @@ const Registration = () => {
           </div>
 
           <div className="flex items-center justify-between mt-4">
-            <span className="w-1/5 border-b  lg:w-1/4"></span>
+            <span className="w-1/5 border-b lg:w-1/4"></span>
             <div className="text-xs text-center text-gray-500 uppercase hover:underline">or Registration with email</div>
             <span className="w-1/5 border-b dark:border-gray-400 lg:w-1/4"></span>
           </div>
@@ -105,38 +120,73 @@ const Registration = () => {
           <form onSubmit={handleSignUp}>
             {/* Form Inputs */}
             <div className="mt-4">
-              <label className="block mb-2 text-sm font-medium text-gray-600 " htmlFor="name">Username</label>
-              <input id="name" name="name" className="block w-full px-4 py-2 text-gray-700 bg-white border rounded-lg focus:border-blue-400 focus:ring-opacity-40 focus:outline-none focus:ring focus:ring-blue-300" type="text" />
-            </div>
-            <div className="mt-4">
-              <label className="block mb-2 text-sm font-medium text-gray-600 " htmlFor="photo">Photo URL</label>
-              <input id="photo" name="photo" className="block w-full px-4 py-2 text-gray-700 bg-white border rounded-lg focus:border-blue-400 focus:ring-opacity-40 focus:outline-none focus:ring focus:ring-blue-300" type="text" />
-            </div>
-            <div className="mt-4">
-              <label className="block mb-2 text-sm font-medium text-gray-600 " htmlFor="LoggingEmailAddress">Email Address</label>
-              <input id="LoggingEmailAddress" name="email" className="block w-full px-4 py-2 text-gray-700 bg-white border rounded-lg focus:border-blue-400 focus:ring-opacity-40 focus:outline-none focus:ring focus:ring-blue-300" type="email" />
+              <label className="block mb-2 text-sm font-medium text-gray-600" htmlFor="name">Username</label>
+              <input
+                id="name"
+                name="name"
+                className="block w-full px-4 py-2 border rounded-lg focus:border-blue-400 focus:ring-opacity-40 focus:outline-none focus:ring focus:ring-blue-300"
+                type="text"
+                placeholder="Enter your username"
+              />
             </div>
 
             <div className="mt-4">
-              <label className="block mb-2 text-sm font-medium text-gray-600 " htmlFor="loggingPassword">Password</label>
-              <input id="loggingPassword" name="password" className="block w-full px-4 py-2 text-gray-700 bg-white border rounded-lg focus:border-blue-400 focus:ring-opacity-40 focus:outline-none focus:ring focus:ring-blue-300" type="password" />
-              {errorMessage && <p className="text-red-500 text-sm">{errorMessage}</p>}
+              <label className="block mb-2 text-sm font-medium text-gray-600" htmlFor="photo">Photo URL</label>
+              <input
+                id="photo"
+                name="photo"
+                className="block w-full px-4 py-2 border rounded-lg focus:border-blue-400 focus:ring-opacity-40 focus:outline-none focus:ring focus:ring-blue-300"
+                type="text"
+                placeholder="Enter your photo URL"
+              />
             </div>
 
-            <div className="mt-6">
-              <button type="submit" className="w-full bg-[#06B6D4]">Sign Up</button>
+            <div className="mt-4">
+              <label className="block mb-2 text-sm font-medium text-gray-600" htmlFor="email">Email Address</label>
+              <input
+                id="email"
+                name="email"
+                className="block w-full px-4 py-2 border rounded-lg focus:border-blue-400 focus:ring-opacity-40 focus:outline-none focus:ring focus:ring-blue-300"
+                type="email"
+                placeholder="Enter your email address"
+              />
             </div>
+
+            <div className="mt-4">
+              <label className="block mb-2 text-sm font-medium text-gray-600" htmlFor="password">Password</label>
+              <div className="relative">
+                <input
+                  id="password"
+                  name="password"
+                  className="block w-full px-4 py-2 border rounded-lg focus:border-blue-400 focus:ring-opacity-40 focus:outline-none focus:ring focus:ring-blue-300"
+                  type={showPassword ? 'text' : 'password'}
+                  placeholder="Enter your password"
+                />
+                <button
+                  type="button"
+                  onClick={() => setShowPassword(!showPassword)}
+                  className="absolute right-3 top-1 text-gray-500"
+                >
+                  {showPassword ? <FaEyeSlash /> : <FaEye />}
+                </button>
+              </div>
+              {errorMessage && <p className="mt-2 text-red-600 text-sm">{errorMessage}</p>}
+            </div>
+
+            <button
+              type="submit"
+              className="w-full px-4 py-2 mt-4 font-bold text-white bg-cyan-500 rounded hover:bg-blue-700"
+            >
+              Sign Up
+            </button>
           </form>
-
-          <div className="flex items-center justify-between mt-4">
-            <span className="w-1/5 border-b lg:w-1/4"></span>
-            <Link to="/login" className="text-xs text-gray-500 uppercase hover:underline">or sign in</Link>
-            <span className="w-1/5 border-b lg:w-1/4"></span>
+          
+          <div className="mt-6 text-sm text-center text-gray-500">
+            Already have an account?{' '}
+            <Link to="/login" className="text-blue-600 hover:underline">
+              Log in
+            </Link>
           </div>
-        </div>
-
-        <div className="hidden lg:block lg:w-1/2">
-          {View}
         </div>
       </div>
     </div>

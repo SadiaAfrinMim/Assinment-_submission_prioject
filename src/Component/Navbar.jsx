@@ -127,10 +127,10 @@ const Navbar = () => {
             </ul>
           )}
         </div>
-        <Link to="/" className="font-bold flex items-center h-1 light-ehem text-2xl">
-        <img src="https://i.ibb.co.com/Q6nTYF3/icons8-assignment-64.png" alt="" srcset="" />
-         CollabStudy
-        </Link>
+        <div to="/" className="font-bold flex items-center  light-ehem h-1  text-xl">
+        <img className='w-10' src="https://i.ibb.co.com/Q6nTYF3/icons8-assignment-64.png" alt="" />
+         <span className='hidden lg:block'>CollabStudy</span>
+        </div>
       </div>
 
       <div className="navbar-center hidden lg:flex">
@@ -145,29 +145,25 @@ const Navbar = () => {
         {!user ? (
           <>
             <button
-              className="py-2  whitespace-nowrap  btn bg-[#8B5CF6]  rounded-lg sm:mb-0"
+              className="py-2 whitespace-nowrap  btn bg-[#8B5CF6]  rounded-none sm:mb-0"
               onClick={handleLogin}
             >
               Log in
             </button>
           </>
         ) : (
-          <div className=" flex items-center justify-center lg:pt-4 lg:pr-8">
+          <div className="relative">
             {/* Profile Picture */}
             <div
               className="relative group"
               onClick={() => setIsDropdownOpen(!isDropdownOpen)}
             >
               
-              <div className="lg:tooltip" data-tip={user.displayName}>
- 
-  <img
+              <img
                 src={user.photoURL}
                 alt="User Avatar"
                 className="w-10 h-10 rounded-full"
               />
-</div>
-
               {/* Display Name on Hover */}
 
              

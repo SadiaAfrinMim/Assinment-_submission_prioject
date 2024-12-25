@@ -4,6 +4,7 @@ import toast from 'react-hot-toast'; // Import react-hot-toast
 import { useNavigate, useParams } from 'react-router-dom';
 import DatePicker from 'react-datepicker';
 import { AuthContext } from '../Authprovider/Authprovider';
+import { Helmet } from 'react-helmet-async';
 
 const UpdateAssignment = () => {
   const navigate = useNavigate()
@@ -63,14 +64,13 @@ const UpdateAssignment = () => {
         `${import.meta.env.VITE_API_URL}/assignments/${id}/${user?.email}`, // Pass email in the URL
         assignmentData,{withCredentials:true}
       );
-      
+      toast.success('Assignment updated successfully!');
 
-      if (data.success) {
-        toast.success('Assignment updated successfully!'); // Success toast
+   
+        // Success toast
         navigate('/assignments')
-      } else {
-        toast.error(data.message || 'Failed to update assignment.'); // Error toast
-      }
+    
+        toast.error(data.message || 'Failed to update assignment.')
     } catch (error) {
       toast.error('You are not authorized to update this assignment'); // Show unauthorized toast
     }

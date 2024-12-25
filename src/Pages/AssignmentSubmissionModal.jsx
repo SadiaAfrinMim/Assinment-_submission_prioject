@@ -101,10 +101,11 @@ const AssignmentSubmissionModal = ({ assignmentId, dueDate, onClose, title, crea
               <span className="label-text">Submission Time</span>
             </label>
             <DatePicker
-              className="border p-2 rounded-md"
-              selected={startdate}
-              onChange={(date) => setStartDate(date)}
-            />
+  className="border p-2 rounded-md"
+  selected={startdate}
+  disabled // Prevents user interactionp
+/>
+
           </div>
 
           {/* Action Buttons */}

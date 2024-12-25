@@ -12,11 +12,13 @@ import PendingAssignment from "../Pages/PendingAssignment";
 import UpdateAssainment from "../Pages/UpdateAssainment";
 import Searchingassingment from "../Pages/Searchingassingment";
 import Privateroute from "./Privateroute";
+import Error from "../Pages/Error";
 
 const router = createBrowserRouter([
   {
     path: "/",
     element:<Mainlayout></Mainlayout>,
+    errorElement: <Error></Error>,
     children:[
       {
         path:'/',
@@ -45,7 +47,7 @@ const router = createBrowserRouter([
       },
       {
         path:'/search',
-        element:<Searchingassingment></Searchingassingment>
+        element:<Privateroute><Searchingassingment></Searchingassingment></Privateroute>
       },
       {
         path:'/pending-assignments',

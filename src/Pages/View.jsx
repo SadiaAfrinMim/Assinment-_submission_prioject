@@ -3,6 +3,7 @@ import { useParams } from 'react-router-dom';
 import axios from 'axios';
 import AssignmentSubmissionModal from './AssignmentSubmissionModal';
 import { format } from 'date-fns';  // Import format from date-fns
+import { Helmet } from 'react-helmet-async';
 
 const AssignmentDetails = () => {
   const { id } = useParams(); // Get assignment ID from URL
@@ -61,7 +62,7 @@ const AssignmentDetails = () => {
             <div className="card-actions justify-end">
               <button
                 onClick={handleTakeAssignment}
-                className="btn btn-primary"
+                className="btn bg-cyan-500"
               >
                 Take Assignment
               </button>

@@ -12,10 +12,12 @@ import { HelmetProvider } from "react-helmet-async";
 
 
 
+
 ReactDOM.createRoot(document.getElementById("root")).render(
   <React.StrictMode>
-     <HelmetProvider/>
+  
    <Authprovider>
+   <HelmetProvider>
    <Toaster
   position="top-right"  // Position of the toast
   reverseOrder={false}  // Whether the toast should appear in reverse order
@@ -26,6 +28,8 @@ ReactDOM.createRoot(document.getElementById("root")).render(
 
    
    <RouterProvider router={router} />
+   </HelmetProvider>
+ 
    
    </Authprovider>
   </React.StrictMode>
