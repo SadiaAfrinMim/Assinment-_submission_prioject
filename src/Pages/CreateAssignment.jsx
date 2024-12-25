@@ -4,16 +4,19 @@ import "react-datepicker/dist/react-datepicker.css";
 import axios from "axios";
 import toast from "react-hot-toast";
 import { AuthContext } from "../Authprovider/Authprovider";
-import AOS from 'aos';
-import 'aos/dist/aos.css';
+import AOS from "aos";
+import "aos/dist/aos.css";
 import { useNavigate } from "react-router-dom";
 
 const CreateAssignment = () => {
-  const navigate = useNavigate()
+  const navigate = useNavigate();
+  
   useEffect(() => {
-    AOS.init({ duration: 2000 });  // Customize the duration for animations
+    AOS.init({ duration: 2000 }); // Initialize animation library
   }, []);
-  const { user } = useContext(AuthContext); // Get user info
+  
+  const { user } = useContext(AuthContext); // Fetch user context
+  
   const [formData, setFormData] = useState({
     title: "",
     description: "",
@@ -23,8 +26,16 @@ const CreateAssignment = () => {
     dueDate: new Date(), // Default to current date
   });
 
+  // Input field change handler
   const handleInputChange = (e) => {
     const { name, value } = e.target;
+
+    // Validate marks to ensure it's within the range of 0-100
+    if (name === "marks" && (value < 0 || value > 100)) {
+      toast.error("Marks must be between 0 and 100");
+      return;
+    }
+
     setFormData({ ...formData, [name]: value });
   };
 
@@ -44,17 +55,11 @@ const CreateAssignment = () => {
     };
 
     try {
-     await axios.post(
-        `${import.meta.env.VITE_API_URL}/assignments`,
-        assignmentData
-      );
-      toast.success(
-        "Assignment created successfully"
-      );
-      navigate('/assignments')
-    
+      await axios.post(`${import.meta.env.VITE_API_URL}/assignments`, assignmentData);
+      toast.success("Assignment created successfully!");
+      navigate("/assignments");
     } catch (error) {
-      console.error("Error creating assignment:", error); // Debug log
+      console.error("Error creating assignment:", error);
       toast.error("Failed to create assignment!");
     }
   };
@@ -77,7 +82,7 @@ const CreateAssignment = () => {
             />
           </div>
           <div>
-            <label className="block  mb-2">Description</label>
+            <label className="block mb-2">Description</label>
             <textarea
               name="description"
               value={formData.description}
@@ -91,18 +96,20 @@ const CreateAssignment = () => {
         {/* Row 2 */}
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
           <div>
-            <label className="block  mb-2">Marks</label>
+            <label className="block mb-2">Marks</label>
             <input
               type="number"
               name="marks"
               value={formData.marks}
               onChange={handleInputChange}
               required
+              min="0"
+              max="100"
               className="w-full p-3 border rounded-lg"
             />
           </div>
           <div>
-            <label className="block  mb-2">Thumbnail Image URL</label>
+            <label className="block mb-2">Thumbnail Image URL</label>
             <input
               type="url"
               name="thumbnail"
@@ -113,7 +120,7 @@ const CreateAssignment = () => {
             />
           </div>
           <div>
-            <label className="block  mb-2">Difficulty Level</label>
+            <label className="block mb-2">Difficulty Level</label>
             <select
               name="difficulty"
               value={formData.difficulty}
@@ -130,7 +137,7 @@ const CreateAssignment = () => {
         {/* Row 3 */}
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 items-end">
           <div>
-            <label className="block  mb-2">Due Date</label>
+            <label className="block mb-2">Due Date</label>
             <DatePicker
               selected={formData.dueDate}
               onChange={handleDateChange}

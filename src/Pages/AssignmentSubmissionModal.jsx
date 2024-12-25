@@ -5,33 +5,23 @@ import toast from 'react-hot-toast';
 import DatePicker from 'react-datepicker';
 import { compareAsc } from 'date-fns';
 
-const AssignmentSubmissionModal = ({ assignmentId, dueDate, onClose, title, createdBy,mark }) => {
-  
+const AssignmentSubmissionModal = ({ assignmentId, dueDate, onClose, title, createdBy, mark }) => {
   const { user } = useContext(AuthContext);
   const [startdate, setStartDate] = useState(new Date());
   const [googleDocsLink, setGoogleDocsLink] = useState('');
   const [quickNote, setQuickNote] = useState('');
-  const [status, setStatus] = useState('pending'); // Default status
+  const [status] = useState('pending'); // Default status
   const [isLoading, setIsLoading] = useState(false); // Loading state for the submit button
-  const [submissionDate, setSubmissionDate] = useState(null); // Store submission date
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     setIsLoading(true);
 
-    // Check deadline
+    // Check if the deadline has passed
     if (compareAsc(new Date(), new Date(dueDate)) === 1) {
       setIsLoading(false);
-      return toast.error('Deadline crossed');
+      return toast.error('Deadline has passed');
     }
-
-    // Check if the action is permitted
-    // if (createdBy === user.email) {
-    //   toast.error('Action is not permitted');
-    //   onClose(); // Close the modal automatically if the action is not permitted
-    //   setIsLoading(false);
-    //   return;
-    // }
 
     try {
       await axios.post(`${import.meta.env.VITE_API_URL}/submit-assignment`, {
@@ -42,8 +32,8 @@ const AssignmentSubmissionModal = ({ assignmentId, dueDate, onClose, title, crea
         quickNote,
         status,
         createdBy,
-        myemail: user.email,
-        name: user.displayName,
+        myemail: user?.email,
+        name: user?.displayName || 'Anonymous',
         dueDate,
       });
       toast.success('Assignment submitted successfully!');
@@ -100,31 +90,29 @@ const AssignmentSubmissionModal = ({ assignmentId, dueDate, onClose, title, crea
             <input
               type="email"
               className="input input-bordered w-full"
-              defaultValue={user.email}
+              defaultValue={user?.email || 'Not Available'}
               readOnly
             />
           </div>
 
           {/* Submission Time Field */}
-          {submissionDate && (
-            <div className="form-control">
-              <label className="label">
-                <span className="label-text">Submission Time</span>
-              </label>
-              <DatePicker
-                className="border p-2 rounded-md"
-                selected={startdate}
-                onChange={(date) => setStartDate(date)}
-              />
-            </div>
-          )}
+          <div className="form-control">
+            <label className="label">
+              <span className="label-text">Submission Time</span>
+            </label>
+            <DatePicker
+              className="border p-2 rounded-md"
+              selected={startdate}
+              onChange={(date) => setStartDate(date)}
+            />
+          </div>
 
           {/* Action Buttons */}
           <div className="modal-action flex justify-between items-center">
             <button
               type="button"
               onClick={onClose}
-              className="bg-[#06B6D4] flex-1  btn btn-outline "
+              className="bg-[#06B6D4] flex-1 btn btn-outline"
               disabled={isLoading}
             >
               Cancel

@@ -24,12 +24,20 @@ const Searchingassingment = () => {
     fetchAllAssignments();
   }, [search, filter]); // Trigger re-fetch when search or filter changes
 
- console.log(filter)
- console.log(search)
+const handleReset = () => {
+    setFilter('')
+    setSearch('')
+   
+  }
+
 
 
   return (
+
     <div className='p-2'>
+        {/* <Helmet>
+        <title>All_Assainment || CollabStudy</title>
+      </Helmet> */}
       <h1 className='text-3xl font-bold text-cyan-500 py-8'>Total_Assignment_({assignments.length})</h1>
       
       {/* Search and Filter Section */}
@@ -63,10 +71,10 @@ const Searchingassingment = () => {
         <div className="indicator">
           <span className="indicator-item  border-cyan-500 bg-cyan-500 badge badge-secondary"><FaBookAtlas  className='text-white  '/></span>
           {/* No need for onClick to fetch data since useEffect handles it */}
-          <button
+          <button onClick={handleReset}
             className="btn join-item"
           >
-            Search
+           Reset
           </button>
         </div>
       </div>

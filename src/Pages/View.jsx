@@ -2,27 +2,29 @@ import React, { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 import axios from 'axios';
 import AssignmentSubmissionModal from './AssignmentSubmissionModal';
-import { format } from 'date-fns';  // <-- Import format from date-fns
+import { format } from 'date-fns';  // Import format from date-fns
 
 const AssignmentDetails = () => {
   const { id } = useParams(); // Get assignment ID from URL
-  const [assignment, setAssignment] = useState({});
+  const [assignment, setAssignment] = useState(null);
   const [isModalOpen, setModalOpen] = useState(false);
-  console.log(id)
 
   useEffect(() => {
     fetchAssignmentDetails();
   }, [id]);
 
+  
+
   const fetchAssignmentDetails = async () => {
+   
     try {
+
       const { data } = await axios.get(`${import.meta.env.VITE_API_URL}/assignments/${id}`);
       setAssignment(data);
     } catch (error) {
-      console.error('Error fetching assignment details', error);
+      console.error('Error fetching assignment details:', error);
     }
   };
-  console.log(assignment)
 
   const handleTakeAssignment = () => {
     setModalOpen(true); // Open the modal to submit the assignment
@@ -38,19 +40,18 @@ const AssignmentDetails = () => {
 
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-4">
               <p className="text-sm">
-                <strong>Marks:</strong> {assignment.marks}
+                <strong>Marks:</strong> {assignment?.marks}
               </p>
               <p className="text-sm">
-                <strong>createdBy:</strong> {assignment.createdBy?.email}
+                <strong>Created By:</strong> {assignment?.createdBy?.email || "Unknown"}
               </p>
-              {assignment.dueDate && (
+              {assignment?.dueDate && (
                 <p className="text-sm">
-                  <strong>Due Date:</strong> {format(new Date(assignment.dueDate), 'p')}
-                  {/* 'Pp' will show full date and time */}
+                  <strong>Due Date:</strong> {format(new Date(assignment.dueDate), 'P')}
                 </p>
               )}
               <p className="text-sm">
-                <strong>Difficulty:</strong> {assignment.difficulty}
+                <strong>Difficulty:</strong> {assignment?.difficulty}
               </p>
             </div>
 
@@ -72,7 +73,11 @@ const AssignmentDetails = () => {
 
       {isModalOpen && (
         <AssignmentSubmissionModal
-          assignmentId={assignment._id} createdBy={assignment?.createdBy?.email} mark={assignment.marks}   title={assignment.title} dueDate ={assignment.dueDate}
+          assignmentId={assignment?._id}
+          createdBy={assignment?.createdBy?.email}
+          mark={assignment?.marks}
+          title={assignment?.title}
+          dueDate={assignment?.dueDate}
           onClose={() => setModalOpen(false)}
         />
       )}

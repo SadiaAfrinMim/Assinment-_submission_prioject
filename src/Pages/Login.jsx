@@ -3,11 +3,12 @@ import { Link, useLocation, useNavigate } from 'react-router-dom'
 import { useContext, useEffect } from 'react'
 
 import toast from 'react-hot-toast'
-import { AuthContext } from '../Authprovider/Authprovider'
+
 import { useLottie } from "lottie-react";
 import animation from '../assets/porasuna 1734807272196.json'
 import AOS from 'aos';
 import 'aos/dist/aos.css';
+import { AuthContext } from '../Authprovider/Authprovider';
 
 const Login = () => {
   useEffect(() => {
@@ -15,8 +16,8 @@ const Login = () => {
   }, []);
   const navigate = useNavigate()
   const location = useLocation()
-  const from = location?.state || '/'
-  console.log(from)
+  // const from = location?.state || '/'
+ 
   const { signIn, signInWithGoogle } = useContext(AuthContext)
 
 
@@ -38,7 +39,7 @@ const Login = () => {
       
 
       toast.success('Signin Successful')
-      navigate(from, { replace: true })
+      navigate(location?.state?location.state:'/')
     } catch (err) {
       console.log(err)
       toast.error(err?.message)
@@ -56,7 +57,7 @@ const Login = () => {
       //User Login
       await signIn(email, pass)
       toast.success('Signin Successful')
-      navigate(from, { replace: true })
+      navigate(location?.state?location.state:'/')
     } catch (err) {
       console.log(err)
       toast.error(err?.message)

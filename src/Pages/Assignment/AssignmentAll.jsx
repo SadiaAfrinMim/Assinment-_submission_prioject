@@ -1,7 +1,7 @@
 import React, { useState, useContext, useEffect } from 'react';
 import axios from 'axios';
 import toast from 'react-hot-toast';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { AuthContext } from '../../Authprovider/Authprovider'; // Assuming AuthContext provides user info
 import { FaPenToSquare } from "react-icons/fa6";
 import { FaEye } from "react-icons/fa";
@@ -13,6 +13,7 @@ const AssignmentAll = ({ assignment, fetchdata }) => {
   useEffect(() => {
     AOS.init({ duration: 2000 });  // Customize the duration for animations
   }, []);
+  const navigate = useNavigate()
 
   const { user } = useContext(AuthContext);
   const {
@@ -41,6 +42,8 @@ const AssignmentAll = ({ assignment, fetchdata }) => {
       }
     } catch (error) {
       toast.error('Failed to delete the assignment!');
+      navigate('/login')
+
     }
   };
 

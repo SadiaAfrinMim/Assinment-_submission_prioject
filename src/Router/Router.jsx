@@ -11,6 +11,7 @@ import AssignmentDetails from "../Pages/View";
 import PendingAssignment from "../Pages/PendingAssignment";
 import UpdateAssainment from "../Pages/UpdateAssainment";
 import Searchingassingment from "../Pages/Searchingassingment";
+import Privateroute from "./Privateroute";
 
 const router = createBrowserRouter([
   {
@@ -27,20 +28,20 @@ const router = createBrowserRouter([
       },
       {
         path:'/create-assignment',
-        element:<CreateAssignment></CreateAssignment>
+        element:<Privateroute><CreateAssignment></CreateAssignment></Privateroute>
 
       },
       {
         path:'/my-attempted-assignments',
-        element:<MyAssainment></MyAssainment>
+        element:<Privateroute><MyAssainment></MyAssainment></Privateroute>
       },
       {
         path:'/assignments/details/:id',
-        element:<AssignmentDetails></AssignmentDetails>
+        element:<Privateroute><AssignmentDetails></AssignmentDetails></Privateroute>
       },
       {
         path:'/assignments/update-assignment/:id',
-        element:<UpdateAssainment></UpdateAssainment>
+        element:<Privateroute><UpdateAssainment></UpdateAssainment></Privateroute>
       },
       {
         path:'/search',
@@ -48,7 +49,7 @@ const router = createBrowserRouter([
       },
       {
         path:'/pending-assignments',
-        element:<PendingAssignment></PendingAssignment>
+        element:<Privateroute><PendingAssignment></PendingAssignment></Privateroute>
       },
       {
       path:'/login',
