@@ -1,69 +1,66 @@
-// import axios from 'axios';
-// import React, { useEffect, useState } from 'react';
+import axios from 'axios';
+import React, { useEffect, useState } from 'react';
+import { Tab, Tabs, TabList, TabPanel } from 'react-tabs';
+import 'react-tabs/style/react-tabs.css';
+import AssignmentAll from '../Pages/Assignment/AssignmentAll';
 
-// import { Tab, Tabs, TabList, TabPanel } from 'react-tabs';
-// import 'react-tabs/style/react-tabs.css';
+const Tabcategories = () => {
+  const [categories, setCategories] = useState([]);
 
-// const Tabcategories = () => {
-//     const [categories,setCategories] = useState([])
-//     const[filter,setFilter] = useState([])
-//     useEffect(()=>{
-//         fetchCategories()
-//     },[])
+  useEffect(() => {
+    const fetchCategories = async () => {
+      try {
+        const { data } = await axios.get(`${import.meta.env.VITE_API_URL}/assignments`);
+        setCategories(data);
+      } catch (error) {
+        console.error('Failed to fetch categories:', error);
+      }
+    };
 
-//     const fetchCategories =async()=>{
-//         const { data } = await axios.get(`${import.meta.env.VITE_API_URL}/submit-assignment`)
-//         setCategories(data)
-        
-//     }
+    fetchCategories();
+  }, []);
 
-//     console.log(filter)
-//     return (
-//         <div>
-//               <Tabs>
-//     <TabList
-//     onChange={e=>setFilter(e.target.value)}>
-//       <Tab >Easy</Tab>
-//       <Tab>Medium</Tab>
-//       <Tab>Hard</Tab>
-//     </TabList>
+  return (
+    <div>
+      <Tabs>
+        <TabList>
+          <Tab>Easy</Tab>
+          <Tab>Medium</Tab>
+          <Tab>Hard</Tab>
+        </TabList>
 
-//     <TabPanel >
-//     <div className='grid grid-cols-1  gap-8 mt-8 xl:mt-16 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4'>
-//             {categories
-//               .filter(categorie => categorie.
-//                 difficulty === 'Easy')
-//               .map(categorie => (
-//                 <JobCard key={categorie._id} categorie={categorie} />
-//               ))}
-//           </div>
-//     </TabPanel>
-//     <TabPanel>
-//     <div className='grid grid-cols-1  gap-8 mt-8 xl:mt-16 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4'>
-//             {categories
-//               .filter(categorie => categorie.
-//                 difficulty === 'Medium')
-//               .map(categorie => (
-//                 <JobCard key={categorie._id} categorie={categorie} />
-//               ))}
-//           </div>
-//     </TabPanel>
-//     <TabPanel>
-//     <div className='grid grid-cols-1 gap-8 mt-8 xl:mt-16 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4'>
-//             {categories
-//               .filter(categorie => categorie.
-//                 difficulty === 'Hard')
-//               .map(categorie => (
-//                 <JobCard key={categorie._id} categorie={categorie} />
-//               ))}
-//           </div>
-//     </TabPanel>
-//     <TabPanel>
-//       <h2>Any content 2</h2>
-//     </TabPanel>
-//   </Tabs>
-//         </div>
-//     );
-// };
+        <TabPanel>
+          <div className="grid grid-cols-1 gap-8 mt-8 xl:mt-16 md:grid-cols-2 lg:grid-cols-2">
+            {categories
+              .filter((assignment) => assignment.difficulty === 'Easy')
+              .map((assignment) => (
+                <AssignmentAll key={assignment._id} assignment={assignment} />
+              ))}
+          </div>
+        </TabPanel>
 
-// export default Tabcategories;
+        <TabPanel>
+          <div className="grid grid-cols-1 gap-8 mt-8 xl:mt-16 md:grid-cols-2 lg:grid-cols-2 ">
+            {categories
+              .filter((assignment) => assignment.difficulty === 'Medium')
+              .map((assignment) => (
+                <AssignmentAll key={assignment._id} assignment={assignment} />
+              ))}
+          </div>
+        </TabPanel>
+
+        <TabPanel>
+          <div className="grid grid-cols-1 gap-8 mt-8 xl:mt-16 md:grid-cols-2 lg:grid-cols-2">
+            {categories
+              .filter((assignment) => assignment.difficulty === 'Hard')
+              .map((assignment) => (
+                <AssignmentAll key={assignment._id} assignment={assignment} />
+              ))}
+          </div>
+        </TabPanel>
+      </Tabs>
+    </div>
+  );
+};
+
+export default Tabcategories;

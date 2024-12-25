@@ -27,6 +27,7 @@
     "sort-by": "^0.0.2",
     "sweetalert": "^2.1.2",
     "sweetalert2": "^11.15.3",
+    "typewriter-effect": "^2.21.0",
     "use-local-storage": "^3.0.0"
   },
   "devDependencies": {

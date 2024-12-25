@@ -2,6 +2,7 @@ import axios from 'axios';
 import React, { useEffect, useState } from 'react';
 import AssignmentAll from './AssignmentAll';
 import { Helmet } from 'react-helmet-async';
+import Tabcategories from '../../Component/Tabcategories';
 
 
 const Assignment = () => {
@@ -30,6 +31,8 @@ const Assignment = () => {
           <title>AllAssainment || CollabStudy</title>
         </Helmet>
       <h1 className='text-3xl font-bold text-cyan-500 py-8'>Total_Assainment_({assignments.length})</h1>
+
+      <Tabcategories></Tabcategories>
     
       <div className='grid  rounded-lg lg:grid-cols-2 md:grid-cols-2 grid-cols-1 gap-8'>
         {assignments.map((assignment) => (
