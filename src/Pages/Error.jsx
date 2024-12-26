@@ -8,14 +8,14 @@ import { AuthContext } from '../Authprovider/Authprovider';
 const Error = () => {
     const { isDark,setIsDark } = useContext(AuthContext);
     return (
-        <div data-theme={isDark ? "dark" : "light"}  isChecked={isDark} handleChange={() => setIsDark(!isDark)}>
+        <div className='' data-theme={isDark ? "dark" : "light"}  isChecked={isDark} handleChange={() => setIsDark(!isDark)}>
           
              
 
          
           <Navbar></Navbar>
      
-     <div className="flex m-12 flex-col items-center justify-center w-full space-y-6 px-4">
+     <div className="flex m-12 mx-auto flex-col items-center justify-center w-full space-y-6 px-4">
      <Helmet>
   <title>Error || CollabStudy</title>
 </Helmet>

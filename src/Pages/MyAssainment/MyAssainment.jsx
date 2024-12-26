@@ -40,7 +40,7 @@ const MyAssignment = () => {
   }, [user?.email]); // Dependency array ensures re-run if user.email changes
 
   return (
-    <div className=" p-4">
+    <div className="w-11/12 mx-auto p-4">
        <Helmet>
           <title>MySubmittedAssainment || CollabStudy</title>
         </Helmet>

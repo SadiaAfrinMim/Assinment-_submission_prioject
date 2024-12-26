@@ -11,11 +11,8 @@ import 'aos/dist/aos.css';
 import UseAxiosSecure from '../../Hooks/UseAxiosSecure';
 
 const AssignmentAll = ({ assignment, fetchdata }) => {
-  const axiosSecure = UseAxiosSecure()
-  useEffect(() => {
-    AOS.init({ duration: 2000 });  // Customize the duration for animations
-  }, []);
-  const navigate = useNavigate()
+  const axiosSecure = UseAxiosSecure();
+  const navigate = useNavigate();
 
   const { user } = useContext(AuthContext);
   const {
@@ -31,21 +28,33 @@ const AssignmentAll = ({ assignment, fetchdata }) => {
 
   const [isDeleteModalOpen, setDeleteModalOpen] = useState(false);
 
+  useEffect(() => {
+    AOS.init({ duration: 2000 });
+  }, []);
+
   const handleDelete = async () => {
+    if (!user?.email) {
+      toast.error('Please log in to delete assignments.');
+      navigate('/login');
+      return;
+    }
+
     try {
-      const response = await axiosSecure.delete(
-        `/assignments/${_id}/${user.email}`,{withCredentials:true}
+      const response = await axios.delete(
+        `${import.meta.env.VITE_API_URL}/assignments/${_id}/${user.email}`
       );
 
       if (response.status === 200) {
-        setDeleteModalOpen(false);
         toast.success('Assignment deleted successfully!');
+        setDeleteModalOpen(false);
         fetchdata();
       }
     } catch (error) {
-      toast.error('Failed to delete the assignment!');
-      navigate('/login')
-
+      if (error.response?.status === 401) {
+        toast.error("Unauthorized! You can't delete this assignment.");
+      } else {
+        toast.error('An error occurred while deleting the assignment.');
+      }
     }
   };
 
@@ -53,23 +62,23 @@ const AssignmentAll = ({ assignment, fetchdata }) => {
     setDeleteModalOpen(false);
   };
 
-  const legthOfText = (text, length) => {
+  const truncateText = (text, length) => {
     return text.length > length ? `${text.substring(0, length)}...` : text;
   };
 
   return (
-    <div data-aos="zoom-in"  className="border-white overflow-hidden  border-x rounded-lg border-t bg-base-100 shadow-xl mb-4">
+    <div data-aos="zoom-in" className="border-white overflow-hidden border-x rounded-lg border-t bg-base-100 shadow-xl mb-4">
       <div className="lg:flex md:flex flex-1 gap-8 items-center justify-between border-b-4 rounded-lg border-cyan-500 p-4">
         {/* Image */}
-        <div className=" mb-4 lg:mb-0">
-          <img src={thumbnail} alt={title} className="w-full h-64  object-cover rounded-lg" />
+        <div className="mb-4 lg:mb-0">
+          <img src={thumbnail} alt={title} className="w-full h-64 object-cover rounded-lg" />
         </div>
 
         {/* Assignment Info */}
-        <div className="w-full flex-1 ">
-          <div className="">
-            <h2 className="card-title text-xl font-semibold">{legthOfText(title, 30)}</h2>
-            <p>{legthOfText(description, 60)}</p>
+        <div className="w-full flex-1">
+          <div>
+            <h2 className="card-title text-xl font-semibold">{truncateText(title, 30)}</h2>
+            <p>{truncateText(description, 60)}</p>
             <p className="text-sm mt-2">
               <strong>Marks: </strong>{marks} <br />
               <strong>Difficulty: </strong>{difficulty}
@@ -78,24 +87,23 @@ const AssignmentAll = ({ assignment, fetchdata }) => {
               <strong>Due Date: </strong>{new Date(dueDate).toLocaleString()}
             </p>
             <p className="text-sm">
-              <strong>Created by: </strong>{createdBy?.displayName}
+              <strong>Created by: </strong>{createdBy?.displayName || 'Unknown'}
             </p>
             <p className="text-sm whitespace-nowrap">
-              <strong>Email: </strong>{createdBy?.email}
+              <strong>Email: </strong>{createdBy?.email || 'N/A'}
             </p>
-         
 
-          {/* Action Buttons */}
-          <div className="flex space-x-2 mt-4">
-            <Link to={`/assignments/details/${_id}`} className="btn bg-[#06B6D4] text-white flex items-center justify-center p-2 rounded-md hover:bg-[#03879a] transition duration-300">
-              <FaEye className="text-2xl font-bold" />
-            </Link>
-            <Link to={`/assignments/update-assignment/${_id}`} className="btn bg-yellow-600 text-white flex items-center justify-center p-2 rounded-md hover:bg-yellow-500 transition duration-300">
-              <FaPenToSquare className="text-2xl font-bold" />
-            </Link>
-            <button onClick={() => setDeleteModalOpen(true)} className="btn bg-red-600 text-white flex items-center justify-center p-2 rounded-md hover:bg-red-500 transition duration-300">
-              <MdDeleteSweep className="text-2xl font-bold" />
-            </button>
+            {/* Action Buttons */}
+            <div className="flex space-x-2 mt-4">
+              <Link to={`/assignments/details/${_id}`} className="btn bg-[#06B6D4] text-white flex items-center justify-center p-2 rounded-md hover:bg-[#03879a] transition duration-300">
+                <FaEye className="text-2xl font-bold" />
+              </Link>
+              <Link to={`/assignments/update-assignment/${_id}`} className="btn bg-yellow-600 text-white flex items-center justify-center p-2 rounded-md hover:bg-yellow-500 transition duration-300">
+                <FaPenToSquare className="text-2xl font-bold" />
+              </Link>
+              <button onClick={() => setDeleteModalOpen(true)} className="btn bg-red-600 text-white flex items-center justify-center p-2 rounded-md hover:bg-red-500 transition duration-300">
+                <MdDeleteSweep className="text-2xl font-bold" />
+              </button>
             </div>
           </div>
         </div>

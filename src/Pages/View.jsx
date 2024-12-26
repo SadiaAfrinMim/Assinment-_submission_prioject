@@ -20,7 +20,7 @@ const AssignmentDetails = () => {
    
     try {
 
-      const { data } = await axios.get(`${import.meta.env.VITE_API_URL}/assignments/${id}`,{withCredentials:true});
+      const { data } = await axios.get(`${import.meta.env.VITE_API_URL}/assignments/${id}`);
       setAssignment(data);
     } catch (error) {
       console.error('Error fetching assignment details:', error);

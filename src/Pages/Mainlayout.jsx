@@ -4,11 +4,12 @@ import { Outlet } from 'react-router-dom';
 import Footer from '../Component/Footer';
 import { AuthContext } from '../Authprovider/Authprovider';
 
+
 const Mainlayout = () => {
     const { isDark,setIsDark } = useContext(AuthContext);
     return (
         
-            <div  data-theme={isDark ? "dark" : "light"}  isChecked={isDark} handleChange={() => setIsDark(!isDark)}>
+            <div className='' data-theme={isDark ? "dark" : "light"}  handleChange={() => setIsDark(!isDark)}>
             <Navbar></Navbar>
             
             <Outlet></Outlet>
