@@ -16,7 +16,7 @@ const Assignment = () => {
   const fetchAllAssignments = async () => {
     try {
       // Fetch assignments using GET request
-      const { data } = await axios.get(`${import.meta.env.VITE_API_URL}/assignments`);
+      const { data } = await axios.get(`${import.meta.env.VITE_API_URL}/assignments`,{withCredentials:true});
       setAssignments(data); // Set assignments in state
     } catch (error) {
       console.error("Error fetching assignments:", error);

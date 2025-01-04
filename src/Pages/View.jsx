@@ -20,7 +20,7 @@ const AssignmentDetails = () => {
    
     try {
 
-      const { data } = await axios.get(`${import.meta.env.VITE_API_URL}/assignments/${id}`);
+      const { data } = await axios.get(`${import.meta.env.VITE_API_URL}/assignments/${id}`,{withCredentials:true});
       setAssignment(data);
     } catch (error) {
       console.error('Error fetching assignment details:', error);
@@ -62,7 +62,7 @@ const AssignmentDetails = () => {
             <div className="card-actions justify-end">
               <button
                 onClick={handleTakeAssignment}
-                className="btn bg-cyan-500"
+                className="btn btn-primary"
               >
                 Take Assignment
               </button>

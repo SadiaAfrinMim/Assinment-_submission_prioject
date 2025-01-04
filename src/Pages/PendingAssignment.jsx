@@ -6,9 +6,11 @@ import { FaEye } from 'react-icons/fa6';
 import AOS from 'aos';
 import 'aos/dist/aos.css';
 import { useNavigate } from 'react-router-dom';
+import UseAxiosSecure from '../Hooks/UseAxiosSecure';
 
 const PendingAssignment = () => {
   const navigate = useNavigate();
+  const axiosSecure = UseAxiosSecure()
 
   useEffect(() => {
     AOS.init({ duration: 2000 }); // Initialize animations
@@ -23,9 +25,10 @@ const PendingAssignment = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
 
   useEffect(() => {
+
     const fetchPendingAssignments = async () => {
       try {
-        const { data } = await axios.get(`${import.meta.env.VITE_API_URL}/submit-assignment`, {
+        const { data } = await axiosSecure.get(`${import.meta.env.VITE_API_URL}/submit-assignment`, {
           withCredentials: true,
         });
         setPendingAssignments(data);

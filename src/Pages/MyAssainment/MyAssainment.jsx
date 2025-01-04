@@ -10,11 +10,11 @@ import UseAxiosSecure from '../../Hooks/UseAxiosSecure';
 import { Helmet } from 'react-helmet-async';
 
 const MyAssignment = () => {
-  const axiosSecure = UseAxiosSecure()
-    useEffect(() => {
-      AOS.init({ duration: 2000 });  // Customize the duration for animations
-    }, []);
-  
+  const axiosSecure = UseAxiosSecure();
+  useEffect(() => {
+    AOS.init({ duration: 2000 }); // Initialize AOS
+  }, []);
+
   const { id } = useParams(); // Retrieve params (if needed)
   const { user } = useContext(AuthContext); // Get the logged-in user info
   const [assignments, setAssignments] = useState([]); // State to hold assignments
@@ -24,9 +24,10 @@ const MyAssignment = () => {
   useEffect(() => {
     const fetchMyAssignments = async () => {
       try {
-        const { data } = await axiosSecure.get(`/submit-assignmen/${user?.email}`,{withCredentials:true});
-
-       
+        const { data } = await axiosSecure.get(
+          `/submit-assignmen/${user?.email}`,
+          { withCredentials: true }
+        );
         setAssignments(data); // Set user-specific assignments
       } catch (error) {
         console.error('Error fetching submitted assignments:', error);
@@ -41,10 +42,12 @@ const MyAssignment = () => {
 
   return (
     <div className="w-11/12 mx-auto p-4">
-       <Helmet>
-          <title>MySubmittedAssainment || CollabStudy</title>
-        </Helmet>
-      <h2 className="text-2xl font-bold text-cyan-500 mb-4">My Submitted Assignments ({assignments?.length})</h2>
+      <Helmet>
+        <title>My Submitted Assignments || CollabStudy</title>
+      </Helmet>
+      <h2 className="text-2xl font-bold text-cyan-500 mb-4">
+        My Submitted Assignments ({assignments?.length})
+      </h2>
 
       {/* Loading state */}
       {isLoading ? (
@@ -52,49 +55,67 @@ const MyAssignment = () => {
       ) : assignments?.length === 0 ? (
         <p>No assignments submitted yet.</p>
       ) : (
-        <table  data-aos="fade-down" className="table-auto overflow-hidden  w-full text-center border-collapse">
-          <thead>
-            <tr className="animate-fade-in">
-              <th className="border-b p-2">Assignment Title</th>
-              <th className="border-b p-2">Status</th>
-              <th className="border-b p-2">Assigned Marks</th>
-              <th className="border-b p-2">Obtained Marks</th>
-              <th className="border-b p-2">Feedback</th>
-              <th className="border-b p-2">Google Docs Link</th>
-            </tr>
-          </thead>
-          <tbody>
-            {assignments?.map((assignment) => (
-              <tr key={assignment?._id} className="hover:bg-gray-100 transition-colors duration-300">
-                <td className="border-b p-2">{assignment?.title}</td>
-                <td className="border-b p-2">
-                  <span
-                    className={`${
-                      assignment?.status === 'completed' ? 'text-green-500' : 'text-yellow-500'
-                    } animate-pulse`}
-                  >
-                    {assignment?.status}
-                  </span>
-                </td>
-                <td className="border-b p-2">{assignment?.mark || 'N/A'}</td>
-                <td className="border-b p-2">{assignment?.marks || 'N/A'}</td>
-                <td className="border-b p-2">{assignment?.feedback || 'N/A'}</td>
-                <td className="border-b p-2">
-                  <div className="flex justify-center items-center">
-                    <a
-                      href={assignment?.googleDocsLink}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="text-blue-500 animate-bounce"
-                    >
-                      <FaEye className="text-3xl font-bold" />
-                    </a>
-                  </div>
-                </td>
+        <div className="overflow-x-auto">
+          <table
+            data-aos="fade-down"
+            className="table-auto w-full text-center border-collapse  shadow-md rounded-lg overflow-hidden"
+          >
+            <thead>
+              <tr>
+                <th className="border-b p-2 text-sm md:text-base">Assignment Title</th>
+                <th className="border-b p-2 text-sm md:text-base">Status</th>
+                <th className="border-b p-2 text-sm md:text-base">Assigned Marks</th>
+                <th className="border-b p-2 text-sm md:text-base">Obtained Marks</th>
+                <th className="border-b p-2 text-sm md:text-base">Feedback</th>
+                <th className="border-b p-2 text-sm md:text-base">Google Docs Link</th>
               </tr>
-            ))}
-          </tbody>
-        </table>
+            </thead>
+            <tbody>
+              {assignments?.map((assignment) => (
+                <tr
+                  key={assignment?._id}
+                  className="hover:bg-gray-100 transition-colors duration-300"
+                >
+                  <td className="border-b p-2 text-xs md:text-sm lg:text-base">
+                    {assignment?.title}
+                  </td>
+                  <td className="border-b p-2 text-xs md:text-sm lg:text-base">
+                    <span
+                      className={`${
+                        assignment?.status === 'completed'
+                          ? 'text-green-500'
+                          : 'text-yellow-500'
+                      } font-semibold`}
+                    >
+                      {assignment?.status}
+                    </span>
+                  </td>
+                  <td className="border-b p-2 text-xs md:text-sm lg:text-base">
+                    {assignment?.mark || 'N/A'}
+                  </td>
+                  <td className="border-b p-2 text-xs md:text-sm lg:text-base">
+                    {assignment?.marks || 'N/A'}
+                  </td>
+                  <td className="border-b p-2 text-xs md:text-sm lg:text-base">
+                    {assignment?.feedback || 'N/A'}
+                  </td>
+                  <td className="border-b p-2 text-xs md:text-sm lg:text-base">
+                    <div className="flex justify-center items-center">
+                      <a
+                        href={assignment?.googleDocsLink}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="text-blue-500 hover:text-blue-700"
+                      >
+                        <FaEye className="text-xl lg:text-2xl" />
+                      </a>
+                    </div>
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
       )}
     </div>
   );

@@ -93,7 +93,12 @@ const Registration = () => {
       </Helmet>
       <div className="flex w-full max-w-sm mx-auto overflow-hidden rounded-lg shadow-lg lg:max-w-4xl border border-white">
         <div className="w-full px-6 py-8 md:px-8 lg:w-1/2">
+        
           <div className="flex justify-center mx-auto">
+            <div>
+            {View}
+            </div>
+           
           </div>
           <p className="mt-3 text-xl text-center text-gray-600">Get Your Free Account Now.</p>
           <div
@@ -186,10 +191,19 @@ const Registration = () => {
             <Link to="/login" className="text-blue-600 hover:underline">
               Log in
             </Link>
+            <span className='w-1/5 border-b  md:w-1/4'></span>
           </div>
+        </div>
+        <div
+          className='hidden bg-cover bg-center lg:block lg:w-1/2'
+         
+        >
+          {View}
         </div>
       </div>
     </div>
+         
+   
   );
 };
 

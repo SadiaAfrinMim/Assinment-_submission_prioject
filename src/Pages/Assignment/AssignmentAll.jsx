@@ -41,7 +41,7 @@ const AssignmentAll = ({ assignment, fetchdata }) => {
 
     try {
       const response = await axios.delete(
-        `${import.meta.env.VITE_API_URL}/assignments/${_id}/${user.email}`
+        `${import.meta.env.VITE_API_URL}/assignments/${_id}/${user.email}`,{withCredentials:true}
       );
 
       if (response.status === 200) {
