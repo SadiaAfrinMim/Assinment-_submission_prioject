@@ -5,6 +5,7 @@ import FAQ from '../Component/FAQ';
 import OnlineAdvantage from '../Component/OnlineAdvantage';
 import About from '../Component/About';
 import { Helmet } from 'react-helmet-async';
+import Review from './MyAssainment/Review';
 
 const Home = () => {
     return (
@@ -17,6 +18,7 @@ const Home = () => {
         <div className='space-y-8'>
         <About></About>
           <OnlineAdvantage></OnlineAdvantage>
+          <Review></Review>
             <FAQ></FAQ>
         </div>
             
