@@ -51,71 +51,67 @@ const MyAssignment = () => {
 
       {/* Loading state */}
       {isLoading ? (
-        <p>Loading assignments...</p>
+        <span className="loading loading-spinner text-info"></span>
       ) : assignments?.length === 0 ? (
         <p>No assignments submitted yet.</p>
       ) : (
         <div className="overflow-x-auto">
-          <table
-            data-aos="fade-down"
-            className="table-auto w-full text-center border-collapse  shadow-md rounded-lg overflow-hidden"
-          >
-            <thead>
-              <tr>
-                <th className="border-b p-2 text-sm md:text-base">Assignment Title</th>
-                <th className="border-b p-2 text-sm md:text-base">Status</th>
-                <th className="border-b p-2 text-sm md:text-base">Assigned Marks</th>
-                <th className="border-b p-2 text-sm md:text-base">Obtained Marks</th>
-                <th className="border-b p-2 text-sm md:text-base">Feedback</th>
-                <th className="border-b p-2 text-sm md:text-base">Google Docs Link</th>
-              </tr>
-            </thead>
-            <tbody>
-              {assignments?.map((assignment) => (
-                <tr
-                  key={assignment?._id}
-                  className="hover:bg-gray-100 transition-colors duration-300"
-                >
-                  <td className="border-b p-2 text-xs md:text-sm lg:text-base">
-                    {assignment?.title}
-                  </td>
-                  <td className="border-b p-2 text-xs md:text-sm lg:text-base">
-                    <span
-                      className={`${
-                        assignment?.status === 'completed'
-                          ? 'text-green-500'
-                          : 'text-yellow-500'
-                      } font-semibold`}
-                    >
-                      {assignment?.status}
-                    </span>
-                  </td>
-                  <td className="border-b p-2 text-xs md:text-sm lg:text-base">
-                    {assignment?.mark || 'N/A'}
-                  </td>
-                  <td className="border-b p-2 text-xs md:text-sm lg:text-base">
-                    {assignment?.marks || 'N/A'}
-                  </td>
-                  <td className="border-b p-2 text-xs md:text-sm lg:text-base">
-                    {assignment?.feedback || 'N/A'}
-                  </td>
-                  <td className="border-b p-2 text-xs md:text-sm lg:text-base">
-                    <div className="flex justify-center items-center">
-                      <a
-                        href={assignment?.googleDocsLink}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="text-blue-500 hover:text-blue-700"
-                      >
-                        <FaEye className="text-xl lg:text-2xl" />
-                      </a>
-                    </div>
-                  </td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+          {assignments?.map((assignment) => (
+           <div
+           key={assignment?._id}
+           className="border shadow-xl rounded-lg p-6 hover:shadow-2xl transition-all duration-500 transform hover:scale-105"
+         >
+           {/* Assignment Image */}
+           {assignment?.thumbnail && (
+             <div className="mb-4 relative overflow-hidden rounded-lg">
+               <img
+                 src={assignment?.thumbnail}
+                 alt={assignment?.title}
+                 className="w-full h-40 object-cover rounded-lg transition-transform duration-500 hover:scale-110"
+               />
+               <div className="absolute top-0 left-0 w-full h-full bg-black opacity-25"></div> {/* Dark overlay */}
+             </div>
+           )}
+         
+           <h3 className="text-xl font-bold text-[#06B6D4] mb-3">{assignment?.title}</h3>
+           <p className="text-sm  mb-2">
+             <strong>Status:</strong>{" "}
+             <span
+               className={`${
+                 assignment?.status === "completed" ? "text-green-500" : "text-yellow-500"
+               } font-semibold`}
+             >
+               {assignment?.status}
+             </span>
+           </p>
+           <p className="text-sm  mb-2">
+             <strong>Assigned Marks:</strong> {assignment?.mark || "N/A"}
+           </p>
+           <p className="text-sm  mb-2">
+             <strong>Obtained Marks:</strong> {assignment?.marks || "N/A"}
+           </p>
+           <p className="text-sm  mb-2">
+             <strong>Feedback:</strong> {assignment?.feedback || "N/A"}
+           </p>
+         
+           <div className="flex justify-center mt-4">
+             <a
+               href={assignment?.googleDocsLink}
+               target="_blank"
+               rel="noopener noreferrer"
+               className="text-white bg-[#06B6D4] hover:bg-[#0284a1] transition-all duration-300 px-4 py-2 rounded-lg shadow-lg"
+             >
+               <FaEye className="text-lg lg:text-2xl" />
+             </a>
+           </div>
+         </div>
+         
+          ))}
         </div>
+      </div>
+      
+      
       )}
     </div>
   );

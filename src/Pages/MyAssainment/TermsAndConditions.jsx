@@ -1,4 +1,5 @@
 import React from "react";
+import { Link } from "react-router-dom";
 
 const TermsAndConditions = () => {
   return (
@@ -75,10 +76,10 @@ const TermsAndConditions = () => {
         </div>
 
         {/* Accept Button */}
-        <div className="mt-8 text-center">
-          <button className="px-6 py-3 text-white bg-[#06B6D4] hover:bg-[#0284a1] transition-all duration-300 rounded-lg shadow-lg">
+        <div  className="mt-8 text-center">
+          <Link to={'/assignments'} className="px-6 py-3 text-white bg-[#06B6D4] hover:bg-[#0284a1] transition-all duration-300 rounded-lg shadow-lg">
             Accept & Continue
-          </button>
+          </Link>
         </div>
       </div>
     </div>

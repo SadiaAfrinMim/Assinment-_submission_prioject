@@ -113,76 +113,31 @@ const PendingAssignment = () => {
       {pendingAssignments.length === 0 ? (
         <p className="text-center text-gray-500">No pending assignments to evaluate.</p>
       ) : (
-        <div data-aos="fade-up" className="overflow-x-auto">
-          <table className="table-auto w-full border-collapse">
-            <thead>
-              <tr className="text-left">
-                <th className="border-b p-2 sm:p-4 text-sm sm:text-base">Assignment Title</th>
-                <th className="border-b p-2 sm:p-4 text-sm sm:text-base">Examinee Name</th>
-                <th className="border-b p-2 sm:p-4 text-sm sm:text-base">Email</th>
-                <th className="border-b p-2 sm:p-4 text-sm sm:text-base">Status</th>
-                <th className="border-b p-2 sm:p-4 text-sm sm:text-base">Due Date</th>
-                <th className="border-b p-2 sm:p-4 text-sm sm:text-base">Google Docs Link</th>
-                <th className="border-b p-2 sm:p-4 text-sm sm:text-base">Quick Note</th>
-                <th className="border-b p-2 sm:p-4 text-sm sm:text-base">Action</th>
-              </tr>
-            </thead>
-            <tbody>
-              {pendingAssignments.map((assignment) => (
-                <tr key={assignment._id} className="text-sm sm:text-base">
-                  <td className="border-b p-2 sm:p-4">
-                    {assignment?.title?.length > 20
-                      ? `${assignment?.title?.substring(0, 20)}...`
-                      : assignment?.title}
-                  </td>
-                  <td className="border-b p-2 sm:p-4">{assignment?.name}</td>
-                  <td className="border-b p-2 sm:p-4">{assignment?.myemail}</td>
-                  <td className="border-b p-2 sm:p-4">
-                    <span
-                      className={
-                        assignment?.status === 'completed'
-                          ? 'text-green-500'
-                          : 'text-yellow-500'
-                      }
-                    >
-                      {assignment?.status}
-                    </span>
-                  </td>
-                  <td className="border-b p-2 sm:p-4">
-                    {new Date(assignment?.dueDate).toLocaleDateString()}
-                  </td>
-                  <td className="border-b p-2 sm:p-4 flex justify-center items-center">
-                    <a
-                      href={assignment?.googleDocsLink}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="text-blue-500"
-                    >
-                      <FaEye className="text-2xl sm:text-3xl font-bold" />
-                    </a>
-                  </td>
-                  <td className="border-b p-2 sm:p-4">
-                    {assignment?.quickNote?.length > 50
-                      ? `${assignment?.quickNote.substring(0, 50)}...`
-                      : assignment?.quickNote}
-                  </td>
-                  <td className="border-b p-2 sm:p-4">
-                    <button
-                      className="btn text-white bg-cyan-500 w-full sm:w-auto"
-                      onClick={() => handleMarkAssignment(assignment)}
-                      disabled={
-                        assignment?.status === 'completed' ||
-                        assignment?.myemail === user?.email
-                      }
-                    >
-                      {assignment?.myemail === user?.email ? 'Not Allowed' : 'Give Mark'}
-                    </button>
-                  </td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
-        </div>
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 p-6">
+        {pendingAssignments.map((assignment) => (
+          <div key={assignment._id} className="card border shadow-lg rounded-lg p-4">
+            <h3 className="text-xl font-semibold">{assignment?.title?.length > 20 ? `${assignment?.title?.substring(0, 20)}...` : assignment?.title}</h3>
+            <p className="text-sm">By: {assignment?.name}</p>
+            <p className="text-sm ">Status: 
+              <span className={assignment?.status === 'completed' ? 'text-green-500' : 'text-yellow-500'}>{assignment?.status}</span>
+            </p>
+            <p className="text-sm">Due: {new Date(assignment?.dueDate).toLocaleDateString()}</p>
+            <div className="flex justify-between mt-4">
+              <a href={assignment?.googleDocsLink} target="_blank" rel="noopener noreferrer" className="btn text-blue-500">
+                <FaEye className="text-xl" />
+              </a>
+              <button
+                className="btn text-white bg-cyan-500"
+                onClick={() => handleMarkAssignment(assignment)}
+                disabled={assignment?.status === 'completed' || assignment?.myemail === user?.email}
+              >
+                {assignment?.myemail === user?.email ? 'Not Allowed' : 'Give Mark'}
+              </button>
+            </div>
+          </div>
+        ))}
+      </div>
+      
       )}
 
       {isModalOpen && selectedAssignment && (
