@@ -58,6 +58,19 @@ const Navbar = () => {
         
         </>
       )}
+
+<li>
+            <NavLink
+              to="/TermsAndConditions"
+              className={({ isActive }) =>
+                isActive
+                  ? " bg-[#06B6D4] text-white font-bold rounded-full"
+              : " border-b-4 shadow-lg bg-orange-100 mx-4 px-6 py-2 border-[#06B6D4] rounded-lg"
+              }
+            >
+              Terms & Conditions
+            </NavLink>
+          </li>
     </>
   );
 

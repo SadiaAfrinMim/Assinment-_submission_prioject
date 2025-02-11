@@ -13,6 +13,7 @@ import UpdateAssainment from "../Pages/UpdateAssainment";
 import Searchingassingment from "../Pages/Searchingassingment";
 import Privateroute from "./Privateroute";
 import Error from "../Pages/Error";
+import TermsAndConditions from "../Pages/MyAssainment/TermsAndConditions";
 
 const router = createBrowserRouter([
   {
@@ -56,6 +57,10 @@ const router = createBrowserRouter([
       {
       path:'/login',
     element:<Login></Login>
+    },
+    {
+      path:'/TermsAndConditions',
+      element:<TermsAndConditions></TermsAndConditions>
     },
     {
       path:'/registration',
