@@ -19,7 +19,7 @@ const About = () => {
       const { View } = useLottie(options); 
   return (
     <div className=" py-12 overflow-hidden">
-      <div className="container mx-auto px-6 lg:px-20">
+      <div className=" px-6 lg:px-20">
         <div className="flex flex-col md:flex-row items-center gap-8">
           {/* Left: Image */}
           <div data-aos="fade-right" className="flex-1 overflow-hidden">

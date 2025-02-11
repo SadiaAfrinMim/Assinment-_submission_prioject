@@ -22,17 +22,7 @@ body {
     transition: background-color 0.3s ease, color 0.3s ease;
 }
 
-button {
-    border: none;
-    padding: 0.5rem 1rem;
-    border-radius: 4px;
-    cursor: pointer;
-    transition: background-color 0.3s ease, color 0.3s ease;
-}
 
-button:hover {
-    background-color: var(--toggle-bg);
-}
 
 .navbar {
     background-color: var(--navbar-bg); /* Updated Navbar Blue */
@@ -121,15 +111,7 @@ a:hover {
 }
 
 /* Light Mode Button Styles */
-.light-mode button {
-    background-color: var(--foreground-color); /* Soft blue for buttons */
-    color: var(--secondary-text-color); /* Softer gray text */
-}
 
-.light-mode button:hover {
-    background-color: var(--toggle-bg); /* Vivid Blue hover effect */
-    color: var(--primary-text-color); /* Darker text on hover */
-}
 
 /* Light Mode Link Hover Effects */
 a.primary-link:hover {
@@ -161,45 +143,3 @@ header {
 }
 
 /* Button Styles */
-
-/* Primary Button */
-button.primary {
-    background-color: var(--foreground-color);
-    color: var(--secondary-text-color);
-}
-
-button.primary:hover {
-    background-color: var(--toggle-bg);
-}
-
-/* Secondary Button */
-button.secondary {
-    background-color: var(--toggle-bg);
-    color: var(--primary-text-color);
-}
-
-button.secondary:hover {
-    background-color: var(--foreground-color);
-    color: var(--secondary-text-color);
-}
-
-/* Success Button */
-button.success {
-    background-color: var(--success-color);
-    color: var(--secondary-text-color);
-}
-
-button.success:hover {
-    background-color: var(--highlight-color);
-}
-
-/* Error Button */
-button.error {
-    background-color: var(--error-color);
-    color: var(--secondary-text-color);
-}
-
-button.error:hover {
-    background-color: var(--foreground-color);
-    color: var(--primary-text-color);
-}

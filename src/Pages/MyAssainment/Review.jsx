@@ -13,7 +13,7 @@ const FlexWithPhoto = () => {
           Our user-friendly platform offers seamless communication, progress tracking, and smart tools 
           to boost your productivity. Join us today and take your workflow to the next level!
         </p>
-        <button className="px-6 py-3 bg-sky-500 text-white rounded-lg transition">
+        <button className="btn btn-outline btn-info">
           Get Started Now
         </button>
       </div>
@@ -23,7 +23,7 @@ const FlexWithPhoto = () => {
         <img
           src="https://i.ibb.co.com/Pv4XDbRw/business-meeting-23-2147551792.jpg"
           alt="Collaboration in Action"
-          className="rounded-full w-64 h-64 border-8 border-sky-400 p-3 shadow-lg"
+          className="rounded-full w-64 h-64 border-8 border-[#06B6D4]  p-3 shadow-lg"
         />
       </div>
     </div>

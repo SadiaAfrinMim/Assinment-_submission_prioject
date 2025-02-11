@@ -180,7 +180,7 @@ const Registration = () => {
 
             <button
               type="submit"
-              className="w-full px-4 py-2 mt-4 font-bold text-white bg-cyan-500 rounded hover:bg-blue-700"
+              className="w-full px-4 py-3 mt-4 font-bold text-white bg-cyan-500 rounded "
             >
               Sign Up
             </button>

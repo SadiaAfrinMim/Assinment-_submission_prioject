@@ -155,7 +155,7 @@ const Login = () => {
             <div className='mt-6'>
               <button
                 type='submit'
-                className='w-full bg-[#06B6D4]'
+                className='w-full px-4 py-3 mt-4 font-bold text-white bg-cyan-500 rounded '
               >
                 Sign In
               </button>

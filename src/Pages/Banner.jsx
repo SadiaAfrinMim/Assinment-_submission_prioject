@@ -71,7 +71,7 @@ const Banner = () => {
             >
               <h2 className="text-4xl font-bold">{slide.title}</h2>
               <p className="text-lg max-w-xl">{slide.description}</p>
-              <button className="btn btn-outline border-[#06B6D4] text-[#06B6D4] bg-transparent hover:bg-[#06B6D4] hover:text-white rounded-lg">
+              <button className="btn btn-outline btn-info">
                 {slide.buttonText}
               </button>
             </div>
