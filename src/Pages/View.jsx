@@ -40,7 +40,7 @@ const AssignmentDetails = () => {
         <div className="card shadow-lg bg-base-100">
           <div className="card-body">
             <h1 className="card-title text-2xl font-bold">{assignment.title}</h1>
-            <p className="text-gray-700 my-4">{assignment.description}</p>
+            <p className=" my-4">{assignment.description}</p>
 
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-4">
               <p className="text-sm">
