@@ -20,7 +20,7 @@ const AssignmentAll = ({ assignment, fetchdata }) => {
     title,
     description,
     marks,
-    thumbnail,
+    image,
     difficulty,
     dueDate,
     createdBy,
@@ -71,7 +71,7 @@ const AssignmentAll = ({ assignment, fetchdata }) => {
       <div className="lg:flex md:flex flex-1 gap-8 items-center justify-between border-b-4 rounded-lg border-cyan-500 p-4">
         {/* Image */}
         <div className="mb-4 lg:mb-0">
-          <img src={thumbnail} alt={title} className="w-full h-64 object-cover rounded-lg" />
+          <img src={image} alt={title} className="w-full h-64 object-cover rounded-lg" />
         </div>
 
         {/* Assignment Info */}

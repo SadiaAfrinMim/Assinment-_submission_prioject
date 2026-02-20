@@ -1,36 +1,30 @@
-import React, { useState, useContext, useEffect } from "react";
+import React, { useState, useContext } from "react";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import axios from "axios";
 import toast from "react-hot-toast";
 import { AuthContext } from "../Authprovider/Authprovider";
-import AOS from "aos";
-import "aos/dist/aos.css";
 import { useNavigate } from "react-router-dom";
+import { FaCloudUploadAlt } from "react-icons/fa";
 
 const CreateAssignment = () => {
+  const { user } = useContext(AuthContext);
   const navigate = useNavigate();
-  
-  useEffect(() => {
-    AOS.init({ duration: 2000 }); // Initialize animation library
-  }, []);
-  
-  const { user } = useContext(AuthContext); // Fetch user context
-  
+
   const [formData, setFormData] = useState({
     title: "",
     description: "",
     marks: "",
-    thumbnail: "",
-    difficulty: "Easy", // Default dropdown value
-    dueDate: new Date(), // Default to current date
+    difficulty: "Easy",
+    dueDate: new Date(),
+    image: null,
   });
 
-  // Input field change handler
+  const [preview, setPreview] = useState(null);
+
   const handleInputChange = (e) => {
     const { name, value } = e.target;
 
-    // Validate marks to ensure it's within the range of 0-100
     if (name === "marks" && (value < 0 || value > 100)) {
       toast.error("Marks must be between 0 and 100");
       return;
@@ -39,121 +33,173 @@ const CreateAssignment = () => {
     setFormData({ ...formData, [name]: value });
   };
 
-  const handleDateChange = (date) => {
-    setFormData({ ...formData, dueDate: date });
+  const handleFileChange = (e) => {
+    const file = e.target.files[0];
+    setFormData({ ...formData, image: file });
+
+    if (file) {
+      setPreview(URL.createObjectURL(file));
+    }
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    const assignmentData = {
-      ...formData,
+    if (!formData.image) {
+      toast.error("Image is required");
+      return;
+    }
+
+    const assignmentPayload = {
+      title: formData.title,
+      description: formData.description,
+      marks: Number(formData.marks),
+      difficulty: formData.difficulty,
+      dueDate: formData.dueDate,
       createdBy: {
-        email: user?.email || "Unknown",
-        displayName: user?.displayName || "Anonymous",
+        email: user?.email,
+        displayName: user?.displayName,
       },
     };
 
+    const formDataToSend = new FormData();
+    formDataToSend.append("data", JSON.stringify(assignmentPayload));
+    formDataToSend.append("image", formData.image);
+
     try {
-      await axios.post(`${import.meta.env.VITE_API_URL}/assignments`, assignmentData);
+      await axios.post(
+        `${import.meta.env.VITE_API_URL}/assignments`,
+        formDataToSend
+      );
+
       toast.success("Assignment created successfully!");
       navigate("/assignments");
     } catch (error) {
-      console.error("Error creating assignment:", error);
-      toast.error("Failed to create assignment!");
+      console.error(error);
+      toast.error("Failed to create assignment");
     }
   };
 
   return (
-    <div data-aos="fade-left" className=" overflow-hidden mx-auto p-6 my-12 border border-white shadow-md rounded-md">
-      <h2 className="text-2xl font-bold mb-6">Create Assignment</h2>
-      <form onSubmit={handleSubmit} className="space-y-6">
-        {/* Row 1 */}
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+    <div className="min-h-screen bg-gradient-to-br from-cyan-50 to-blue-100 flex items-center justify-center p-4">
+      <div className="w-full max-w-4xl bg-white shadow-2xl rounded-xl overflow-hidden">
+        
+        {/* Header */}
+        <div className="bg-gradient-to-r from-cyan-500 to-blue-500 p-6">
+          <h2 className="text-3xl font-bold text-white text-center">
+            Create New Assignment
+          </h2>
+          <p className="text-center text-cyan-100 mt-2">
+            Design engaging assignments for learners
+          </p>
+        </div>
+
+        {/* Form */}
+        <form onSubmit={handleSubmit} className="p-8 space-y-6">
+
+          {/* Title */}
           <div>
-            <label className="block mb-2">Title</label>
+            <label className="block font-semibold mb-1">Title</label>
             <input
               type="text"
               name="title"
-              value={formData.title}
-              onChange={handleInputChange}
               required
-              className="w-full p-3 border rounded-lg"
+              placeholder="Enter assignment title"
+              className="w-full p-3 border rounded-lg focus:ring-2 focus:ring-cyan-400 outline-none"
+              onChange={handleInputChange}
             />
           </div>
+
+          {/* Description */}
           <div>
-            <label className="block mb-2">Description</label>
+            <label className="block font-semibold mb-1">Description</label>
             <textarea
               name="description"
-              value={formData.description}
-              onChange={handleInputChange}
               required
-              className="w-full p-3 border rounded-lg"
-            ></textarea>
-          </div>
-        </div>
-
-        {/* Row 2 */}
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-          <div>
-            <label className="block mb-2">Marks</label>
-            <input
-              type="number"
-              name="marks"
-              value={formData.marks}
+              rows="4"
+              placeholder="Describe the assignment"
+              className="w-full p-3 border rounded-lg focus:ring-2 focus:ring-cyan-400 outline-none"
               onChange={handleInputChange}
-              required
-              min="0"
-              max="100"
-              className="w-full p-3 border rounded-lg"
             />
           </div>
-          <div>
-            <label className="block mb-2">Thumbnail Image URL</label>
-            <input
-              type="url"
-              name="thumbnail"
-              value={formData.thumbnail}
-              onChange={handleInputChange}
-              required
-              className="w-full p-3 border rounded-lg"
-            />
-          </div>
-          <div>
-            <label className="block mb-2">Difficulty Level</label>
-            <select
-              name="difficulty"
-              value={formData.difficulty}
-              onChange={handleInputChange}
-              className="w-full p-3 border rounded-lg"
-            >
-              <option value="Easy">Easy</option>
-              <option value="Medium">Medium</option>
-              <option value="Hard">Hard</option>
-            </select>
-          </div>
-        </div>
 
-        {/* Row 3 */}
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 items-end">
+          {/* Marks + Difficulty */}
+          <div className="grid md:grid-cols-2 gap-6">
+            <div>
+              <label className="block font-semibold mb-1">Marks</label>
+              <input
+                type="number"
+                name="marks"
+                min="0"
+                max="100"
+                required
+                placeholder="0 - 100"
+                className="w-full p-3 border rounded-lg focus:ring-2 focus:ring-cyan-400 outline-none"
+                onChange={handleInputChange}
+              />
+            </div>
+
+            <div>
+              <label className="block font-semibold mb-1">Difficulty</label>
+              <select
+                name="difficulty"
+                className="w-full p-3 border rounded-lg focus:ring-2 focus:ring-cyan-400 outline-none"
+                onChange={handleInputChange}
+              >
+                <option value="Easy">Easy</option>
+                <option value="Medium">Medium</option>
+                <option value="Hard">Hard</option>
+              </select>
+            </div>
+          </div>
+
+          {/* Due Date */}
           <div>
-            <label className="block mb-2">Due Date</label>
+            <label className="block font-semibold mb-1">Due Date</label>
             <DatePicker
               selected={formData.dueDate}
-              onChange={handleDateChange}
-              className="w-full p-3 border rounded-lg"
+              onChange={(date) =>
+                setFormData({ ...formData, dueDate: date })
+              }
+              className="w-full p-3 border rounded-lg focus:ring-2 focus:ring-cyan-400 outline-none"
             />
           </div>
-          <div className="flex justify-end">
-            <button
-              type="submit"
-              className="bg-[#06B6D4] text-white px-6 py-3 rounded-lg hover:bg-blue-600 transition"
-            >
-              Create Assignment
-            </button>
+
+          {/* Image Upload */}
+          <div>
+            <label className="block font-semibold mb-2">Assignment Thumbnail</label>
+            <label className="flex flex-col items-center justify-center border-2 border-dashed border-cyan-400 rounded-lg p-6 cursor-pointer hover:bg-cyan-50 transition">
+              <FaCloudUploadAlt className="text-4xl text-cyan-500 mb-2" />
+              <span className="text-gray-600">
+                Click to upload image
+              </span>
+              <input
+                type="file"
+                accept="image/*"
+                required
+                className="hidden"
+                onChange={handleFileChange}
+              />
+            </label>
+
+            {preview && (
+              <img
+                src={preview}
+                alt="Preview"
+                className="mt-4 w-full h-56 object-cover rounded-lg shadow"
+              />
+            )}
           </div>
-        </div>
-      </form>
+
+          {/* Submit */}
+          <button
+            type="submit"
+            className="w-full bg-gradient-to-r from-cyan-500 to-blue-500 text-white py-3 rounded-lg font-semibold text-lg hover:scale-[1.02] transition transform"
+          >
+            Create Assignment 🚀
+          </button>
+        </form>
+      </div>
     </div>
   );
 };

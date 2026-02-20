@@ -1,88 +1,146 @@
 import React, { useContext, useState, useEffect } from 'react';
 import axios from 'axios';
-import toast from 'react-hot-toast'; // Import react-hot-toast
+import toast from 'react-hot-toast';
 import { useNavigate, useParams } from 'react-router-dom';
 import DatePicker from 'react-datepicker';
 import { AuthContext } from '../Authprovider/Authprovider';
 import { Helmet } from 'react-helmet-async';
+import { FaCloudUploadAlt } from 'react-icons/fa';
 
 const UpdateAssignment = () => {
-  const navigate = useNavigate()
-  const { user } = useContext(AuthContext); // Auth context for user info
-  const { id } = useParams(); // Assignment ID from route
-  
+  const navigate = useNavigate();
+  const { user } = useContext(AuthContext);
+  const { id } = useParams(); // assignment id from route
+
   const [formData, setFormData] = useState({
     title: '',
     description: '',
     marks: '',
-    thumbnail: '',
     difficulty: 'Easy',
     dueDate: new Date(),
+    image: null,          // new image file
+    currentImageUrl: '',  // existing image
   });
 
+  const [preview, setPreview] = useState(null);
+
+  // Fetch assignment data on mount
   useEffect(() => {
+    if (!id) return;
     fetchAssignment();
   }, [id]);
 
   const fetchAssignment = async () => {
     try {
-      const { data } = await axios.get(
-        `${import.meta.env.VITE_API_URL}/assignments/${id}`,{withCredentials: true}
+      const res = await axios.get(
+        `${import.meta.env.VITE_API_URL}/assignments/${id}`,
+        { withCredentials: true }
       );
+
+      if (!res.data) {
+        toast.error('Assignment not found');
+        navigate('/assignments');
+        return;
+      }
+
+      const data = res.data.data || res.data; // handle backend data shape
+
       setFormData({
         title: data.title || '',
         description: data.description || '',
         marks: data.marks || '',
-        thumbnail: data.thumbnail || '',
         difficulty: data.difficulty || 'Easy',
         dueDate: data.dueDate ? new Date(data.dueDate) : new Date(),
+        image: null,
+        currentImageUrl: data.image || '',
       });
+
+      setPreview(data.image || null);
     } catch (error) {
-      toast.error('Failed to load assignment data. Please try again.'); // Show error toast
+      console.error(error);
+      toast.error('Failed to load assignment data');
+      navigate('/assignments');
     }
   };
 
+  // Handle text input changes
   const handleInputChange = (e) => {
     const { name, value } = e.target;
     setFormData({ ...formData, [name]: value });
   };
 
+  // Handle date picker change
   const handleDateChange = (date) => {
     setFormData({ ...formData, dueDate: date });
   };
 
+  // Handle image file change
+  const handleFileChange = (e) => {
+    const file = e.target.files[0];
+    setFormData({ ...formData, image: file });
+    if (file) {
+      setPreview(URL.createObjectURL(file));
+    }
+  };
+
+  // Handle form submission
   const handleSubmit = async (e) => {
     e.preventDefault();
-    const assignmentData = {
-      ...formData,
-      email: user?.email || 'unknown', // Include the email here
-      dueDate: formData.dueDate.toISOString(),
+
+    if (!user?.email) {
+      toast.error('You must be logged in to update assignments');
+      return;
+    }
+
+    const payload = {
+      title: formData.title,
+      description: formData.description,
+      marks: Number(formData.marks),
+      difficulty: formData.difficulty,
+      dueDate: formData.dueDate,
+      createdBy: {
+        email: user.email,
+        displayName: user.displayName,
+      },
     };
 
-    try {
-      const { data } = await axios.put(
-        `${import.meta.env.VITE_API_URL}/assignments/${id}/${user?.email}`, // Pass email in the URL
-        assignmentData,{withCredentials:true}
-      );
-      toast.success('Assignment updated successfully!');
+    const formDataToSend = new FormData();
+    formDataToSend.append('data', JSON.stringify(payload));
 
-   
-        // Success toast
-        navigate('/assignments')
-    
-        toast.error(data.message || 'Failed to update assignment.')
+    if (formData.image) {
+      formDataToSend.append('image', formData.image);
+    }
+
+    try {
+      await axios.put(
+        `${import.meta.env.VITE_API_URL}/assignments/${id}/${user.email}`,
+        formDataToSend,
+        {
+          headers: { 'Content-Type': 'multipart/form-data' },
+          withCredentials: true,
+        }
+      );
+
+      toast.success('Assignment updated successfully!');
+      navigate('/assignments');
     } catch (error) {
-      toast.error('You are not authorized to update this assignment'); // Show unauthorized toast
+      console.error(error);
+      toast.error(
+        error.response?.data?.message ||
+        'You are not authorized to update this assignment.'
+      );
     }
   };
 
   return (
     <div className="container mx-auto p-6 my-12 border border-white shadow-md rounded-md">
-       <Helmet>
-          <title>UpdateAssaignment || CollabStudy</title>
-        </Helmet>
+      <Helmet>
+        <title>Update Assignment || CollabStudy</title>
+      </Helmet>
       <h2 className="text-2xl font-bold mb-6">Update Assignment</h2>
+
       <form onSubmit={handleSubmit} className="space-y-6">
+        {/* Row 1 */}
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
           <div>
             <label className="block mb-2">Title</label>
@@ -103,10 +161,11 @@ const UpdateAssignment = () => {
               onChange={handleInputChange}
               required
               className="w-full p-3 border rounded-lg"
-            ></textarea>
+            />
           </div>
         </div>
 
+        {/* Row 2 */}
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
           <div>
             <label className="block mb-2">Marks</label>
@@ -117,21 +176,13 @@ const UpdateAssignment = () => {
               onChange={handleInputChange}
               required
               className="w-full p-3 border rounded-lg"
+              min="0"
+              max="100"
             />
           </div>
+
           <div>
-            <label className="block mb-2">Thumbnail Image URL</label>
-            <input
-              type="url"
-              name="thumbnail"
-              value={formData.thumbnail}
-              onChange={handleInputChange}
-              required
-              className="w-full p-3 border rounded-lg"
-            />
-          </div>
-          <div>
-            <label className="block mb-2">Difficulty Level</label>
+            <label className="block mb-2">Difficulty</label>
             <select
               name="difficulty"
               value={formData.difficulty}
@@ -143,8 +194,32 @@ const UpdateAssignment = () => {
               <option value="Hard">Hard</option>
             </select>
           </div>
+
+          <div>
+            <label className="block mb-2">Thumbnail Image</label>
+            <label className="flex flex-col items-center justify-center border-2 border-dashed border-cyan-400 rounded-lg p-4 cursor-pointer hover:bg-cyan-50 transition">
+              <FaCloudUploadAlt className="text-3xl text-cyan-500 mb-2" />
+              <span className="text-gray-600">
+                Click to upload new image
+              </span>
+              <input
+                type="file"
+                accept="image/*"
+                className="hidden"
+                onChange={handleFileChange}
+              />
+            </label>
+            {preview && (
+              <img
+                src={preview ?? ''}
+                alt="Preview"
+                className="mt-2 w-full h-48 object-cover rounded-md shadow"
+              />
+            )}
+          </div>
         </div>
 
+        {/* Row 3 */}
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 items-end">
           <div>
             <label className="block mb-2">Due Date</label>
